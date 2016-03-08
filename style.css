@@ -1,0 +1,27 @@
+body {
+    font-family: Helvetica Neue;
+    font-weight: 200;
+    padding: 0;
+    margin: 0;
+}
+.left {
+    text-align: left;
+    float: left;
+}
+
+.right {
+    float: right;
+    text-align: right;
+}
+
+.carm-bar {
+    width: 50%;
+    padding: 10px 0;
+    background-color: #BFBACB;
+}
+
+.dew-bar {
+    width: 50%;
+    padding: 10px 0;
+    background-color: #DDF4C6;
+}
