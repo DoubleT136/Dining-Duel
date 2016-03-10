@@ -1,5 +1,5 @@
 # Project Title: Dining Duel
-#### By: Elizabeth Lanzilla, Tommy Tang, Derick Yang, and Zach Zager
+#### By: Elizabeth Lanzilla, Luke Machamer, Tommy Tang, Chelsea Wang, Derick Yang, and Zach Zager
 
 ### Problem statement
 Tufts students often have trouble deciding whether to eat at Carmichael or Dewick-Macphie dining hall. Dining Duel makes the choice easy, with a compiled cumulative score for each dining hall.
