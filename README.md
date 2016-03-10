@@ -36,3 +36,12 @@ We make it easy to decide on the right place to go, by compiling a cumulative sc
     (sum[over items]((upvotes/(upvotes + downvotes)))*item weight) / (sum[over items](item weight))
     ```
     * We will sort the food items from the most popular to least popular on the menu pages.
+
+![mockup 1](http://i1318.photobucket.com/albums/t645/diningduel/mobile_food_ratings_zpspridytyw.png)
+![mockup 2](http://i1318.photobucket.com/albums/t645/diningduel/mobile_front_page_zpszeku1ixb.png)
+![mockup 3](http://i1318.photobucket.com/albums/t645/diningduel/mobile_vegetarian_prompt_zpsvrh24lb5.png)
+![mockup 4](http://i1318.photobucket.com/albums/t645/diningduel/desktop_view_zpsgg1axfz3.png)
+![mockup 5](http://i1318.photobucket.com/albums/t645/diningduel/mobile_simple_menu_zpsbvbykcp0.png)
+![mockup 6](http://i1318.photobucket.com/albums/t645/diningduel/desktop_vegetarian_prompt_zps5gy5i8p8.png)
+
+
