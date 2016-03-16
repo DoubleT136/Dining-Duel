@@ -47,3 +47,7 @@ Database of food reviews:
 ![mockup 4](http://i1318.photobucket.com/albums/t645/diningduel/desktop_view_zpsgg1axfz3.png)
 ![mockup 5](http://i1318.photobucket.com/albums/t645/diningduel/mobile_simple_menu_zpsbvbykcp0.png)
 ![mockup 6](http://i1318.photobucket.com/albums/t645/diningduel/desktop_vegetarian_prompt_zps5gy5i8p8.png)
+
+#Comments by Ming
+* Good idea!  Scraping menus from the Tufts Dining website can be a challenge.  What third-party APIs and/or data sets will be used?
+* 14 / 15
