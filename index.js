@@ -39,6 +39,10 @@ app.get('/getmealdata', function(req, res) {
     var month = req.query.month;
     var year = req.query.year;
     var meal = req.query.meal;
+    if (!day || !month || !year || !meal) {
+        res.sendStatus(404);
+        return;
+    }
     var compKey = meal + '-' + day + '-' + month + '-' + year;
     var query = {};
     query[compKey] = { $exists: true };
@@ -48,21 +52,23 @@ app.get('/getmealdata', function(req, res) {
             var apiarg = '/' + day + '/' + month + '/' + year;
             request(tddAPI + 'carm' + apiarg, function(error, response, body) {
                 if (error) {
-                    res.send(500);
+                    res.sendStatus(500);
+                    return;
                 }
                 carmMenu = JSON.parse(body);
                 // instead of hard coding the 'dewick', we could make it more dynamic by allowing user to specify args (requires change to comparisons structure)
                 request(tddAPI + 'dewick' + apiarg, function(error, response, body) {
                     if (error) {
-                        res.send(500);
+                        res.sendStatus(500);
+                        return;
                     }
                     dewMenu = JSON.parse(body);
                     initComp(carmMenu.data[meal], dewMenu.data[meal], function(comparison) {
-                        var retVal = {};
-                        retVal[compKey] = comparison;
-                        res.json(retVal);
+                        var toAdd = {};
+                        toAdd[compKey] = comparison;
+                        res.json(comparison);
                         res.end();
-                        db.collection('comparisons').insert(retVal, function() {});
+                        db.collection('comparisons').insert(toAdd, function() {});
                     });
                     // since we already retrieved the menu data, we add the other meals too
                     for (var othermeal in carmMenu.data) {
@@ -73,8 +79,7 @@ app.get('/getmealdata', function(req, res) {
                 });
             });
         } else {
-            console.log('already exists');
-            res.json(result);
+            res.json(result[compKey]);
             res.end();
         }
     });
@@ -83,9 +88,9 @@ app.get('/getmealdata', function(req, res) {
 
 function addComp(othermeal, query) {
     return function(comparison) {
-        var retVal = {};
-        retVal[othermeal + '-' + query.day + '-' + query.month + '-' + query.year] = comparison;
-        db.collection('comparisons').insert(retVal, function() {});
+        var toAdd = {};
+        toAdd[othermeal + '-' + query.day + '-' + query.month + '-' + query.year] = comparison;
+        db.collection('comparisons').insert(toAdd, function() {});
     };
 }
 
@@ -118,21 +123,22 @@ function getFoodsAndScore(menu, callback) {
     });
 }
 
-function checkForFood(foodType, key, callback) {
+function checkForFood(foodType, foodname, callback) {
     var query = {};
-    key = key.replace(/[\."$]/g, "");
-    query[key] = { $exists: true };
+    foodname = foodname.replace(/[\."$]/g, "");
+    query.name = foodname;
     db.collection('foods').findOne(query, function(err, result) {
         if (!result) {
-            query[key] = {
-                imgurl: '',
+            var toAdd = {
+                name: foodname,
+                imgurl: 'http://placehold.it/200/eeba93?text=No+Image+Found',
                 type: foodType,
                 weight: weights[foodType], //delete this?
                 ups: 0,
                 downs: 0
             };
-            callback(query);
-            db.collection('foods').insert(query, function() {});
+            callback(toAdd);
+            db.collection('foods').insert(toAdd, function() {});
         } else {
             callback(result);
         }

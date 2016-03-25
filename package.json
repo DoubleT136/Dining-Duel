@@ -6,9 +6,8 @@
   "dependencies": {
     "async": "^2.0.0-rc.2",
     "body-parser": "^1.15.0",
-    "bootstrap": "^3.3.6",
     "express": "^4.13.4",
-    "mongod": "^1.3.0",
+    "mongodb": "^2.1.11",
     "request": "^2.69.0"
   },
   "devDependencies": {},

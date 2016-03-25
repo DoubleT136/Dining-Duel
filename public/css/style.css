@@ -1,9 +1,14 @@
+/* todo: use Bootstrap container instead to style everything
+EVERYTHING is in a grid, remember that. Look into using React 
+to render front end, because only updates what has changed*/
 body {
+    background-color: #38171a;
     font-family: Helvetica Neue;
     font-weight: 200;
     padding: 0;
     margin: 0;
 }
+
 .left {
     text-align: left;
     float: left;
@@ -17,11 +22,37 @@ body {
 .carm-bar {
     width: 50%;
     padding: 10px 0;
-    background-color: #BFBACB;
+    background-color: #7878E5;
 }
 
 .dew-bar {
     width: 50%;
     padding: 10px 0;
-    background-color: #DDF4C6;
+    background-color: #86E886;
+}
+
+.carm-text {
+    margin: 20px;
+}
+
+.dew-text {
+    margin: 20px;
+}
+
+/*#left-foods {
+}
+
+#right-foods {
+}
+*/
+.left-food-thumbnail {
+    margin-right: 20px;
+}
+
+.right-food-thumbnail {
+    margin-left: 20px;
+}
+
+.inline {
+    display: inline;
 }
