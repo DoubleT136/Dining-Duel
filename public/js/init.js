@@ -3,7 +3,7 @@ window.addEventListener('load', function() {
         url: '/getmealdata',
         data: {
             meal: "Dinner",
-            day: 31,
+            day: 28,
             month: 3,
             year: 2016
         },

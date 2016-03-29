@@ -2,14 +2,14 @@
 #### By: Elizabeth Lanzilla, Luke Machamer, Tommy Tang, Chelsea Wang, Derick Yang, and Zach Zager
 
 ## To run the app:
-    sudo mongod
+    `sudo mongod`
 and then:
-    nodemon index.js
+    `nodemon index.js`
 
 To inspect database:
-    mongo
+    `mongo`
 To install dependencies (--save to add to package.json):
-    npm install [dependency] --save
+    `npm install [dependency] --save`
 
 ### Problem statement
 Tufts students often have trouble deciding whether to eat at Carmichael or Dewick-Macphie dining hall. Dining Duel makes the choice easy, with a compiled cumulative score for each dining hall.
