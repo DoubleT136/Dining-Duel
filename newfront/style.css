@@ -1,0 +1,27 @@
+/* style.css */
+
+@media (min-width: 1200px) {
+    .container{
+        max-width: 970px;
+    }
+}
+
+.carmtitle {
+	background-color: #7878E5;
+
+}
+
+.dewicktitle {
+	background-color: #86E886;
+
+}
+
+.carmitems {
+
+
+
+}
+
+.dewickitems {
+
+}
