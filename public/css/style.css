@@ -1,6 +1,7 @@
 /* todo: use Bootstrap container instead to style everything
 EVERYTHING is in a grid, remember that. Look into using React 
 to render front end, because only updates what has changed*/
+
 body {
     background-color: #38171a;
     font-family: Helvetica Neue;
