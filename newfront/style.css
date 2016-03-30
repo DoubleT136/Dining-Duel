@@ -1,21 +1,44 @@
 /* style.css */
-
+/*
 @media (min-width: 1200px) {
     .container{
         max-width: 970px;
     }
 }
+*/
+
+.dining_hall {
+	border-bottom: 50px;
+	font-size: 50px;
+}
 
 .carmtitle {
 	background-color: #7878E5;
-
 }
 
 .dewicktitle {
 	background-color: #86E886;
-
 }
 
+.progress {
+	height: 100px;
+	border-radius: 50px;
+}
+
+.progress span {
+    color: #C0C0C0;
+    font-weight: bold;
+    font-size: 4em;
+    font-family: 'Cinzel', serif;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    padding-top: 40px;
+    display: inline-block;
+}
+
+
+/*
 .carmitems {
 
 
@@ -25,3 +48,5 @@
 .dewickitems {
 
 }
+*/
+/* http://jsfiddle.net/v4ySL/2/ */
