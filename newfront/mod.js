@@ -23,6 +23,7 @@ function load() {
 function numbers() {
 
 	carmPerc = getRandom(0,100);
+	carmPerc = keepAboveTwentyFive(carmPerc);
 	carm.attributes.style.nodeValue = "width:"+carmPerc+"%";
 
 	dewPerc = 100-carmPerc;
@@ -32,9 +33,6 @@ function numbers() {
 	console.log(carm.attributes.style.nodeValue + " " +dewick.attributes.style.nodeValue);
 }
 
-function getRandom(min, max) {
-	return Math.random() * (max - min) + min;
-}
 
 /*
 function stateChange(newState) {

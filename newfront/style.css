@@ -6,6 +6,27 @@
     }
 }
 */
+/*
+#carm {
+    width: 40%;
+}
+
+#dewick {
+    width: 10%;
+}
+*/
+
+
+#carm {
+    background-image: none;
+    background-color: #8e5925;
+}
+
+#dewick {
+    background-image: none;
+    background-color: #417DC1; /* Tufts Blue */
+}
+
 
 .dining_hall {
 	border-bottom: 50px;
@@ -26,10 +47,15 @@
 }
 
 .progress span {
-    color: #C0C0C0;
+    /*color: #000000;*/
+    color: #333;
+    text-shadow:
+       -1px -1px 0 #ffffff,  
+        1px -1px 0 #ffffff,
+        -1px 1px 0 #ffffff,
+         1px 1px 0 #ffffff;
     font-weight: bold;
-    font-size: 4em;
-    font-family: 'Cinzel', serif;
+    font-size: 5em;
     text-align: center;
     vertical-align: middle;
     width: 100%;
