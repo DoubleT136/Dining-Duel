@@ -16,6 +16,9 @@
 }
 */
 
+body {
+    background-color: #b3d9ff;
+}
 
 #carm {
     background-image: none;
@@ -26,7 +29,6 @@
     background-image: none;
     background-color: #417DC1; /* Tufts Blue */
 }
-
 
 .dining_hall {
 	border-bottom: 50px;
