@@ -3,44 +3,40 @@ window.addEventListener('load', function() {
         url: '/getmealdata',
         data: {
             meal: "Dinner",
-            day: 31,
+            day: 28,
             month: 3,
             year: 2016
         },
         success: function(result) {
-            // console.log(result);
-            // sort in order of most significant
-            result.carm.forEach(function(item, index) {
-                $("#leftfoods").append(function() {
-                    return $("<div>").append(function() {
-                        return $("<img>").attr({
-                            alt: item.name,
-                            src: item.imgurl,
-                            class: 'left-food-thumbnail'
-                        });
-                    }).append(function() {
-                        return $("<span>")./*append(function() {
-                            return $("<p>").*/html(item.name)/*.attr({
-                                class: 'inline'
-                            });*/
-                            ;
-                    });
-                });
-            });
-            // sort in order of most significant
-            result.dewick.forEach(function(item, index) {
-                $("#rightfoods").append(function() {
-                    return $("<div>").html(item.name).append(function() {
-                        return $("<img>").attr({
-                            alt: item.name,
-                            src: item.imgurl,
-                            class: 'right-food-thumbnail'
-                        });
-                    });
-                });
-            });
-            // $("body").html(JSON.stringify(result));
-        }
-        // dataType: 'dataTypeext/html'
+                console.log(result);
+                // sort in order of most significant
+                // result.carm.forEach(function(item, index) {
+                //     $("#leftfoods").append(function() {
+                //         return $("<div>").append(function() {
+                //             return $("<img>").attr({
+                //                 alt: item.name,
+                //                 src: item.imgurl,
+                //                 class: 'left-food-thumbnail'
+                //             });
+                //         }).append(function() {
+                //             return $("<span>").html(item.name);
+                //         });
+                //     });
+                // });
+                // // sort in order of most significant
+                // result.dewick.forEach(function(item, index) {
+                //     $("#rightfoods").append(function() {
+                //         return $("<div>").html(item.name).append(function() {
+                //             return $("<img>").attr({
+                //                 alt: item.name,
+                //                 src: item.imgurl,
+                //                 class: 'right-food-thumbnail'
+                //             });
+                //         });
+                //     });
+                // });
+                // $("body").html(JSON.stringify(result));
+            }
+            // dataType: 'dataTypeext/html'
     });
 });

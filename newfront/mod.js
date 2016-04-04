@@ -22,3 +22,11 @@ function numbers() {
 	console.log(carm.attributes.style.nodeValue + " " +dewick.attributes.style.nodeValue);
 }
 
+
+function stateChange(newState) {
+    setTimeout(function () {
+        if (newState == -1) {
+            //alert('VIDEO HAS STOPPED');
+        }
+    }, 5000);
+}
