@@ -12,11 +12,18 @@ window.addEventListener('load', function() {
         },
         success: function(result) {
 
-                result.carm.score = 263;
-                result.dewick.score = 163;
+                // INTERMEDIATE STEP: 
+                // will be real scores eventually
+                result.carm.score = 400;
+                result.dewick.score = 625;
+                //
+                //
+                //
 
                 carmResults = result.carm.score;
                 dewickResults = result.dewick.score;
+
+                loadBar();
 
                 console.log(result);
                 // sort in order of most significant

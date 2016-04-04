@@ -5,12 +5,12 @@ function getRandom(min, max) {
 	return Math.random() * (max - min) + min;
 }
 
-function keepAboveTwentyFive(perc) {
+function keepAboveFifteen(perc) {
 
-	if (perc < 25) {
-		return 25;
-	} else if (perc > 75) {
-		return 75;
+	if (perc < 15) {
+		return 15;
+	} else if (perc > 85) {
+		return 85;
 	} else {
 		return perc;
 	}

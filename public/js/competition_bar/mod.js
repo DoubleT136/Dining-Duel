@@ -1,10 +1,10 @@
 //mod.js
 
-function load() {
+function loadBar() {
 
 	console.log("WHENISIT?");
-	console.log(result.carm.score);
-	console.log(dewick.carm.score);
+	console.log(carmResults);
+	console.log(dewickResults);
 
 	carm = document.getElementById("carm");
 	dewick = document.getElementById("dewick");
@@ -15,14 +15,17 @@ function load() {
 
 function numbers() {
 
-	carmPerc = getRandom(0,100);
-	carmPerc = keepAboveTwentyFive(carmPerc);
+	totalResults = carmResults+dewickResults;
+	
+	carmPerc = carmResults/totalResults * 100;
+	carmPerc = keepAboveFifteen(carmPerc);
 	carm.attributes.style.nodeValue = "width:"+carmPerc+"%";
 
 	dewPerc = 100-carmPerc;
+	dewPerc = keepAboveFifteen(dewPerc);
 	dewick.attributes.style.nodeValue = "width:"+dewPerc+"%";
 
-	console.log("carmPerc: "+carmPerc+ " | dewPerc: "+dewPerc);
-	console.log(carm.attributes.style.nodeValue + " " +dewick.attributes.style.nodeValue);
+	//console.log("carmPerc: "+carmPerc+ " | dewPerc: "+dewPerc);
+	//console.log(carm.attributes.style.nodeValue + " " +dewick.attributes.style.nodeValue);
 }
 
