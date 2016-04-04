@@ -5,7 +5,7 @@ window.addEventListener('load', function() {
     $.ajax({
         url: '/getmealdata',
         data: {
-            meal: "Breakfast",
+            meal: "Dinner",
             day: 28,
             month: 3,
             year: 2016
@@ -14,8 +14,8 @@ window.addEventListener('load', function() {
 
                 // INTERMEDIATE STEP: 
                 // will be real scores eventually
-                result.carm.score = 400;
-                result.dewick.score = 625;
+                // result.carm.score = 400;
+                // result.dewick.score = 625;
                 //
                 //
                 //
@@ -38,21 +38,47 @@ window.addEventListener('load', function() {
                                 class: 'left-food-thumbnail'
                             });
                         }).append(function() {
-                            return $("<span>").html(item.name);
-                        }).append($("<span>").html(' Ups: ' + item.up)).append($("<span>").html(' Downs: ' + item.down));
+                            return $("<span>").append(function() {
+                                return $("<div>").html(item.name).attr({
+                                    class: 'food-title'
+                                });
+                            }).append(function() {
+                                return $("<div>").html(' Ups: ' + item.up);
+                            }).append(function() {
+                                return $("<div>").html(' Downs: ' + item.down);
+                            }).attr({
+                                class: 'food-desc'
+                            });
+                        });
+                    }).attr({
+                        class: 'food-unit'
                     });
                 });
                 // sort in order of most significant
                 result.dewick.food_arr.forEach(function(item, index) {
                     $("#rightfoods").append(function() {
-                        return $("<div>").html(item.name).append(function() {
+                        return $("<div>").append(function() {
                             return $("<img>").attr({
-                                alt: item.name,
-                                src: item.imgurl,
-                                class: 'right-food-thumbnail'
+                                    alt: item.name,
+                                    src: item.imgurl,
+                                    class: 'right-food-thumbnail'
+                                });
+                            }).prepend(function() {
+                                return $("<span>").append(function() {
+                                    return $("<div>").html(item.name).attr({
+                                        class: 'food-title'
+                                    });
+                                }).append(function() {
+                                    return $("<div>").html(' Ups: ' + item.up);
+                                }).append(function() {
+                                    return $("<div>").html(' Downs: ' + item.down);
+                                }).attr({
+                                    class: 'food-desc'
+                                });
                             });
-                        }).prepend($("<span>").html(' Downs: ' + item.down)).prepend($("<span>").html(' Ups: ' + item.up));
-                    });
+                        }).attr({
+                            class: 'food-unit'
+                        });
                 });
             }
     });
