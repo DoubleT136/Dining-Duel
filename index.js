@@ -37,12 +37,15 @@ var weights = {
     'HOT BREAKFAST CEREAL': 5,
     'BRK BREADS,PASTRY & TOPPINGS': 15,
     'BREAKFAST MEAT': 25,
+    'BREAKFAST MEATS': 25,
     'BREAKFAST ENTREES': 30,
     'BREAKFAST ENTREE': 30,
     'NOODLERY & STIR FRY': 25,
     'HALAL ENTREES': 40,
     'CHAR-GRILL STATIONS': 30,
-    'HOT BREAKFAST CEREAL BAR': 5
+    'HOT BREAKFAST CEREAL BAR': 5,
+    'FRESH BAKED DESSERTS': 15,
+    'BREAKFAST POTATO': 30
 };
 
 var tddAPI = 'https://tuftsdiningdata.herokuapp.com/menus/';
@@ -259,8 +262,8 @@ function checkForFood(foodType, foodname, callback) {
                 imgurl: 'http://placehold.it/200/eeba93?text=No+Image+Found',
                 type: foodType,
                 weight: weights[foodType], //delete this?
-                up: 0,
-                down: 0
+                up: Math.floor((Math.random() + Math.random() + Math.random()) * 10),
+                down: Math.floor((Math.random() + Math.random() + Math.random()) * 10)
             };
             callback(toAdd);
             db.collection('foods').insert(toAdd, function() {});

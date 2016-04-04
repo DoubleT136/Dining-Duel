@@ -2,7 +2,7 @@ window.addEventListener('load', function() {
     $.ajax({
         url: '/getmealdata',
         data: {
-            meal: "Dinner",
+            meal: "Breakfast",
             day: 28,
             month: 3,
             year: 2016
