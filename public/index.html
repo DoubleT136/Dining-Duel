@@ -6,28 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DiningDuel</title>
-    <link rel="stylesheet" href="/css/style.css" type="text/css"/>
+    
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
 
+    <!-- New style -->
+    <link rel="stylesheet" href="/css/style.css" type="text/css"/>
+
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/init.js"></script>
+    <script src="js/competition_bar/mod.js"></script>
+    <script src="js/competition_bar/numSource.js"></script>
+    <script src="js/closer_dining_hall/closerdininghall.js"></script>
 </head>
 
-<body>
-<!-- <div class="container"> for bootstrap later -->
-    <div>
-    <span class="left carm-bar">
-        <div class="carm-text">
-            <h1>Carmichael</h1>
+<body onload="load()" onload="getLocation()">
+<div class="container">
+    <br>
+    <div class="progress">
+        <div id="carm" class="progress-bar" role="progressbar" style="width:40%">
+            <span>Carmichael<span>
         </div>
-    </span>
-    <span class="right dew-bar">
-        <div class="dew-text">
-            <h1>Dewick</h1>
+        <div id="dewick" class="progress-bar" role="progressbar" style="width:10%">
+            <span>Dewick</span>
         </div>
-    </span>
     </div>
 
     <div>
@@ -38,7 +41,7 @@
         <div id="rightfoods"></div>
     </span>
     </div>
-<!-- </div> -->
+    </div>
 </body>
 
 

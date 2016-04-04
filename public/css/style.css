@@ -3,8 +3,8 @@ EVERYTHING is in a grid, remember that. Look into using React
 to render front end, because only updates what has changed*/
 
 body {
-    background-color: #38171a;
-    font-family: Helvetica Neue;
+    /*background-color: #38171a;*/
+    font-family: Helvetica;
     font-weight: 200;
     padding: 0;
     margin: 0;
@@ -40,12 +40,6 @@ body {
     margin: 20px;
 }
 
-/*#left-foods {
-}
-
-#right-foods {
-}
-*/
 .left-food-thumbnail {
     margin-right: 20px;
 }
@@ -57,3 +51,53 @@ body {
 .inline {
     display: inline;
 }
+
+/* NEW ADDITIONS */
+#carm {
+    background-image: none;
+    background-color: #8e5925;
+}
+
+#dewick {
+    background-image: none;
+    background-color: #417DC1; /* Tufts Blue */
+}
+
+.carmtitle {
+    background-color: #7878E5;
+}
+
+.dewicktitle {
+    background-color: #86E886;
+}
+
+.progress {
+    height: 100px;
+    border-radius: 50px;
+}
+
+.progress span {
+    /*color: #000000;*/
+    color: #333;
+    text-shadow:
+       -1px -1px 0 #ffffff,  
+        1px -1px 0 #ffffff,
+        -1px 1px 0 #ffffff,
+         1px 1px 0 #ffffff;
+    font-weight: bold;
+    font-size: 5em;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    padding-top: 40px;
+    display: inline-block;
+}
+
+@media (max-width: 700px) {
+    .progress span {
+        font-size: 3em;
+    }
+}
+
+
+

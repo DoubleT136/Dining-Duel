@@ -1,16 +1,16 @@
 // closerdininghall.js
 
-var dewick = {};
-dewick.name = "Dewick-Macphie Dining Center";
-dewick.latitude = 42.405412;
-dewick.longitude = -71.121312;
-dewick.distanceFrom = 0;
+dewickDistance = {};
+dewickDistance.name = "Dewick-Macphie Dining Center";
+dewickDistance.latitude = 42.405412;
+dewickDistance.longitude = -71.121312;
+dewickDistance.distanceFrom = 0;
 
-var carm = {};
-carm.name = "Carmichael Hall";
-carm.latitude = 42.409395;
-carm.longitude = -71.122735;
-carm.distanceFrom = 0;
+carmDistance = {};
+carmDistance.name = "Carmichael Hall";
+carmDistance.latitude = 42.409395;
+carmDistance.longitude = -71.122735;
+carmDistance.distanceFrom = 0;
 
 getLocation();
 
@@ -31,19 +31,19 @@ function getLocation() { // gets user's location
 
 function indicateCloserDiningHall() {
 	console.log("You: "+myLat+" "+myLong);
-	console.log("Dewick: "+dewick.latitude+" "+dewick.longitude);
-	console.log("Carm: "+carm.latitude+" "+carm.longitude);
-	calcDistance(dewick);
-	calcDistance(carm);
+	console.log("Dewick: "+dewickDistance.latitude+" "+dewickDistance.longitude);
+	console.log("Carm: "+carmDistance.latitude+" "+carmDistance.longitude);
+	calcDistance(dewickDistance);
+	calcDistance(carmDistance);
 
 	// reveal closer dining hall
-	if (dewick.distanceFrom < carm.distanceFrom) {
+	if (dewickDistance.distanceFrom < carmDistance.distanceFrom) {
 		console.log("You are closer to Dewick");
 	}
-	else if (dewick.distanceFrom > carm.distanceFrom) {
+	else if (dewickDistance.distanceFrom > carmDistance.distanceFrom) {
 		console.log("You are closer to Carm");
 	}
-	else if (dewick.distanceFrom === carm.distanceFrom) {
+	else if (dewickDistance.distanceFrom === carmDistance.distanceFrom) {
 		console.log("You are equally close to both Carm and Dewick");
 	}
 
