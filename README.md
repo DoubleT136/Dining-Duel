@@ -3,11 +3,13 @@
 
 ## To run the app:
     sudo mongod
+
 and then:
     `nodemon index.js`
 
 To inspect database:
     `mongo`
+
 To install dependencies (--save to add to package.json):
     `npm install [dependency] --save`
 
