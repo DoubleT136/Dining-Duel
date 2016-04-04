@@ -7,17 +7,6 @@ function load() {
 
 	numbers();
 
-	//console.log(width);
-	//console.log(width.attributes.style.nodeValue);
-	//console.log(width.clientHeight);
-
-	//carm.attributes.style.nodeValue = "width:50%"
-	//dewick.attributes.style.nodeValue = "width:50%"
-
-	// console.log(width.attributes.style.nodeValue);
-	// console.log(width.clientHeight);
-	// console.log(width.style.height);
-
 }
 
 function numbers() {
@@ -34,7 +23,6 @@ function numbers() {
 }
 
 
-/*
 function stateChange(newState) {
     setTimeout(function () {
         if (newState == -1) {
@@ -42,4 +30,3 @@ function stateChange(newState) {
         }
     }, 5000);
 }
-*/

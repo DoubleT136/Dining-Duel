@@ -1,3 +1,6 @@
+carmResults = 0;
+dewickResults = 0;
+
 window.addEventListener('load', function() {
     $.ajax({
         url: '/getmealdata',
@@ -8,6 +11,20 @@ window.addEventListener('load', function() {
             year: 2016
         },
         success: function(result) {
+
+                // INTERMEDIATE STEP: 
+                // will be real scores eventually
+                result.carm.score = 400;
+                result.dewick.score = 625;
+                //
+                //
+                //
+
+                carmResults = result.carm.score;
+                dewickResults = result.dewick.score;
+
+                loadBar();
+
                 console.log(result);
                 // sort in order of most significant
                 // result.carm.forEach(function(item, index) {
