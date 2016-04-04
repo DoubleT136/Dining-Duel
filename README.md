@@ -2,7 +2,7 @@
 #### By: Elizabeth Lanzilla, Luke Machamer, Tommy Tang, Chelsea Wang, Derick Yang, and Zach Zager
 
 ## To run the app:
-    `sudo mongod`
+    sudo mongod
 and then:
     `nodemon index.js`
 
