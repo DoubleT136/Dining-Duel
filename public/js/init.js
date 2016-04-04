@@ -10,33 +10,39 @@ window.addEventListener('load', function() {
         success: function(result) {
                 console.log(result);
                 // sort in order of most significant
-                // result.carm.forEach(function(item, index) {
-                //     $("#leftfoods").append(function() {
-                //         return $("<div>").append(function() {
-                //             return $("<img>").attr({
-                //                 alt: item.name,
-                //                 src: item.imgurl,
-                //                 class: 'left-food-thumbnail'
-                //             });
-                //         }).append(function() {
-                //             return $("<span>").html(item.name);
-                //         });
-                //     });
-                // });
-                // // sort in order of most significant
-                // result.dewick.forEach(function(item, index) {
-                //     $("#rightfoods").append(function() {
-                //         return $("<div>").html(item.name).append(function() {
-                //             return $("<img>").attr({
-                //                 alt: item.name,
-                //                 src: item.imgurl,
-                //                 class: 'right-food-thumbnail'
-                //             });
-                //         });
-                //     });
-                // });
-                // $("body").html(JSON.stringify(result));
+                result.carm.food_arr.sort(sortFoods);
+                result.dewick.food_arr.sort(sortFoods);
+                result.carm.food_arr.forEach(function(item, index) {
+                    $("#leftfoods").append(function() {
+                        return $("<div>").append(function() {
+                            return $("<img>").attr({
+                                alt: item.name,
+                                src: item.imgurl,
+                                class: 'left-food-thumbnail'
+                            });
+                        }).append(function() {
+                            return $("<span>").html(item.name);
+                        }).append($("<span>").html(' Ups: ' + item.up)).append($("<span>").html(' Downs: ' + item.down));
+                    });
+                });
+                // sort in order of most significant
+                result.dewick.food_arr.forEach(function(item, index) {
+                    $("#rightfoods").append(function() {
+                        return $("<div>").html(item.name).append(function() {
+                            return $("<img>").attr({
+                                alt: item.name,
+                                src: item.imgurl,
+                                class: 'right-food-thumbnail'
+                            });
+                        }).prepend($("<span>").html(' Downs: ' + item.down)).prepend($("<span>").html(' Ups: ' + item.up));
+                    });
+                });
             }
-            // dataType: 'dataTypeext/html'
     });
 });
+
+function sortFoods(a, b) {
+    return ((b.up - b.down) * b.weight) - ((a.up - a.down) * a.weight);        
+}
+
+// React.js: call this.setState() in react. check also: componentDidMount
