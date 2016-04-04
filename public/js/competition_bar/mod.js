@@ -2,6 +2,10 @@
 
 function load() {
 
+	console.log("WHENISIT?");
+	console.log(result.carm.score);
+	console.log(dewick.carm.score);
+
 	carm = document.getElementById("carm");
 	dewick = document.getElementById("dewick");
 
