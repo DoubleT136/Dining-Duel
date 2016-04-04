@@ -129,8 +129,8 @@ app.post('/addvote', function(req, res) {
         }
     }, {
         $inc: {
-            "compdata.carm.food_arr.$.up": vote//,
-           // "compdata.carm.score": carmScoreChange
+            "compdata.carm.food_arr.$.up": vote //,
+                // "compdata.carm.score": carmScoreChange
         }
 
     }, {
@@ -155,8 +155,8 @@ app.post('/addvote', function(req, res) {
             }
         }, {
             $inc: {
-                "compdata.dewick.food_arr.$.up": vote//,
-               // "compdata.dewick.score": dewScoreChange
+                "compdata.dewick.food_arr.$.up": vote //,
+                    // "compdata.dewick.score": dewScoreChange
             },
         }, {
             multi: true
