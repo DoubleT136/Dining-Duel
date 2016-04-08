@@ -108,19 +108,11 @@ app.get('/getmealdata', function(req, res) {
 
 });
 
-/* Think about this: return ONLY WHAT IS NECESSARY, 
+/* Think about this: return ONLY WHAT IS NECESSARY,
 and then update everything else secondary */
-// think about: should we have two separate voting functions, or just one?
-app.post('/addvote', function(req, res) {
+app.post('/upvote', function(req, res) {
     var foodName = req.body.food;
     var compID = req.body.compID;
-    // change "up" or "down" to numeric value
-    var vote = parseInt(req.body.vote);
-    // check if valid vote value
-    if (vote > 1 || vote < -1) {
-        res.send(500);
-        return;
-    }
     // TODO: check if foodname is a valid foodname
 
     // go to comparisons, update votes
@@ -132,7 +124,7 @@ app.post('/addvote', function(req, res) {
         }
     }, {
         $inc: {
-            "compdata.carm.food_arr.$.up": vote //,
+            "compdata.carm.food_arr.$.up": 1 //,
                 // "compdata.carm.score": carmScoreChange
         }
 
@@ -158,7 +150,7 @@ app.post('/addvote', function(req, res) {
             }
         }, {
             $inc: {
-                "compdata.dewick.food_arr.$.up": vote //,
+                "compdata.dewick.food_arr.$.up": 1 //,
                     // "compdata.dewick.score": dewScoreChange
             },
         }, {
@@ -190,21 +182,110 @@ app.post('/addvote', function(req, res) {
         name: foodName,
     }, {
         $inc: {
-            ups: vote
+            ups: 1
         }
     });
 });
 
+app.post('/downvote', function(req, res) {
+    var foodName = req.body.food;
+    var compID = req.body.compID;
+    // TODO: check if foodname is a valid foodname
+
+    // go to comparisons, update votes
+    db.collection('comparisons').update({
+        "compdata.carm.food_arr": {
+            $elemMatch: {
+                name: foodName
+            }
+        }
+    }, {
+        $inc: {
+            "compdata.carm.food_arr.$.down": 1 //,
+                // "compdata.carm.score": carmScoreChange
+        }
+
+    }, {
+        multi: true
+    }, function(err1, count1, result1) {
+        if (err1) {
+            res.send(500);
+            return;
+        }
+
+        if (count1 !== 0) {
+            // update score (can we do it in the update function?)
+            // pass the weight and vote too? for constant-time update
+            updateScore('carm');
+        }
+
+        db.collection('comparisons').update({
+            "compdata.dewick.food_arr": {
+                $elemMatch: {
+                    name: foodName
+                }
+            }
+        }, {
+            $inc: {
+                "compdata.dewick.food_arr.$.down": 1 //,
+                    // "compdata.dewick.score": dewScoreChange
+            },
+        }, {
+            multi: true
+        }, function(err2, count2, result2) {
+            if (err2) {
+                res.send(500);
+                return;
+            }
+
+            if (count2 !== 0) {
+                // update score (can we do it in the update function?)
+                // pass the weight and vote too? for constant-time update
+                updateScore('dewick');
+            }
+
+            db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
+                if (!result) {
+                    res.send(500);
+                } else {
+                    res.send(result.compdata);
+                }
+            });
+        });
+    });
+
+    // go to foods collection, and update that.
+    db.collection('foods').update({
+        name: foodName,
+    }, {
+        $inc: {
+            downs: 1
+        }
+    });
+});
+
+
 function updateScore(hall) {
-    // think about this algorithm a bit more... 
-    // can we do a constant-time update? I think it's possible.
-    var scoreChange; // need some expression here to make it a constant-time update
+    var score = 0;
+    var denom = 0;
+    /*async.forEachOf(menu, function(typearr, type, callback1) {
+        type = type.trim();
+        async.each(typearr, function(foodname, callback2) {
+            checkForFood(type, foodname, function(food) {
+                score += (food.up * food.weight) / (food.up + food.down + 1);
+                denom += food.weight;
+                callback2();
+            });
+        }, function(err) {
+            callback1();
+        });
+    }, function(err) {
+        newScore = score / denom;
+    });*/
     db.collection('comparisons').update({
         compdata: hall // this isn't right... fix the query
     }, {
-        $inc: {
-            score: scoreChange
-        }
+        score: score
     });
 }
 
