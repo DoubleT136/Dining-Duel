@@ -139,7 +139,7 @@ app.post('/upvote', function(req, res) {
         if (count1 !== 0) {
             // update score (can we do it in the update function?)
             // pass the weight and vote too? for constant-time update
-            updateScore('carm');
+            updateCarmScore(compID);
         }
 
         db.collection('comparisons').update({
@@ -164,7 +164,7 @@ app.post('/upvote', function(req, res) {
             if (count2 !== 0) {
                 // update score (can we do it in the update function?)
                 // pass the weight and vote too? for constant-time update
-                updateScore('dewick');
+                updateDewScore(compID);
             }
 
             db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
@@ -216,7 +216,7 @@ app.post('/downvote', function(req, res) {
         if (count1 !== 0) {
             // update score (can we do it in the update function?)
             // pass the weight and vote too? for constant-time update
-            updateScore('carm');
+            updateCarmScore(compID);
         }
 
         db.collection('comparisons').update({
@@ -241,7 +241,7 @@ app.post('/downvote', function(req, res) {
             if (count2 !== 0) {
                 // update score (can we do it in the update function?)
                 // pass the weight and vote too? for constant-time update
-                updateScore('dewick');
+                updateDewScore(compID);
             }
 
             db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
@@ -265,28 +265,51 @@ app.post('/downvote', function(req, res) {
 });
 
 
-function updateScore(hall) {
-    var score = 0;
+function updateDewScore(compID) {
+    var score = 0; // TODO: USE THIS
     var denom = 0;
-    /*async.forEachOf(menu, function(typearr, type, callback1) {
-        type = type.trim();
+    db.collection('comparisons').find({"compdata.dewick.food_arr": {}}).forEach(function(food){
+        console.log("DERICK HELP");
+        console.log(food);
+    })
+    /*async.forEachOf(foodarr, function(food, index, callback1) {
+        console.log(food);
         async.each(typearr, function(foodname, callback2) {
             checkForFood(type, foodname, function(food) {
                 score += (food.up * food.weight) / (food.up + food.down + 1);
                 denom += food.weight;
+                foodArr.push(food);
                 callback2();
             });
         }, function(err) {
             callback1();
         });
     }, function(err) {
-        newScore = score / denom;
-    });*/
+        callback(foodArr, score / denom);
+    });
     db.collection('comparisons').update({
         compdata: hall // this isn't right... fix the query
     }, {
         score: score
-    });
+    });*/
+}
+
+function updateCarmScore(compID) {
+    var score = 0; // TODO: USE THIS
+    var denom = 0;
+    var upvotes
+    db.collection('comparisons').find({compID:compID}).forEach(function(food){
+        food.compdata.carm.food_arr.forEach(function(food){
+            score += (food.up * food.weight) / (food.up + food.down + 1);
+            denom += food.weight;
+        });
+    }), function(){
+        console.log(score/denom);
+        db.collection('comparisons').update({compID:compID},
+            {$set:{"carm.score": score/denom}}
+        );
+    };
+
 }
 
 function addComp(othermeal, query) {
