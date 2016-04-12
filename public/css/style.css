@@ -14,12 +14,15 @@ body {
     text-align: left;
     max-width: 50%;
     float: left;
+    /*margin-right: 10px;*/
 }
 
 .right {
     float: right;
     max-width: 50%;
     text-align: right;
+    /*margin-left: 10px;*/
+
 }
 
 .carm-bar {
@@ -32,6 +35,17 @@ body {
     width: 50%;
     padding: 10px 0;
     background-color: #86E886;
+}
+
+#leftfoods {
+    /*
+    margin-right: 100px;
+    margin-left: 0px;
+    */
+}
+
+#rightfoods {
+    /*margin-left: 0px;*/
 }
 
 .carm-text {
@@ -103,10 +117,24 @@ body {
 
 .food-desc {
     display: inline-block;
-    max-width: 50%;
+    max-width: 60%;
 }
 
 .food-title {
-    font-size: 20px;
+    width: 100%;
+    font-size: 30px;
     font-weight: bold;
+    font-family: Philosopher;
+}
+
+.upButton {
+    display: block;
+    width: 50%;
+    float:left;
+}
+
+.downButton {
+    display: block;
+    width: 50%;
+    float:right;
 }
