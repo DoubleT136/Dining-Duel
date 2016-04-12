@@ -264,52 +264,36 @@ app.post('/downvote', function(req, res) {
     });
 });
 
-
 function updateDewScore(compID) {
     var score = 0; // TODO: USE THIS
     var denom = 0;
-    db.collection('comparisons').find({"compdata.dewick.food_arr": {}}).forEach(function(food){
-        console.log("DERICK HELP");
-        console.log(food);
-    })
-    /*async.forEachOf(foodarr, function(food, index, callback1) {
-        console.log(food);
-        async.each(typearr, function(foodname, callback2) {
-            checkForFood(type, foodname, function(food) {
-                score += (food.up * food.weight) / (food.up + food.down + 1);
-                denom += food.weight;
-                foodArr.push(food);
-                callback2();
-            });
+    db.collection('comparisons').find({compID:compID}).forEach(function(data){
+        async.each(data.compdata.dewick.food_arr, function(food, callback2) {
+            score += (food.up * food.weight) / (food.up + food.down + 1);
+            denom += food.weight;
+            callback2();
         }, function(err) {
-            callback1();
+            db.collection('comparisons').update({compID:compID},
+                {$set:{"compdata.dewick.score": score/denom}}
+            );
         });
-    }, function(err) {
-        callback(foodArr, score / denom);
     });
-    db.collection('comparisons').update({
-        compdata: hall // this isn't right... fix the query
-    }, {
-        score: score
-    });*/
 }
 
 function updateCarmScore(compID) {
-    var score = 0; // TODO: USE THIS
+    var score = 0;
     var denom = 0;
-    var upvotes
-    db.collection('comparisons').find({compID:compID}).forEach(function(food){
-        food.compdata.carm.food_arr.forEach(function(food){
+    db.collection('comparisons').find({compID:compID}).forEach(function(data){
+        async.each(data.compdata.carm.food_arr, function(food, callback2) {
             score += (food.up * food.weight) / (food.up + food.down + 1);
             denom += food.weight;
+            callback2();
+        }, function(err) {
+            db.collection('comparisons').update({compID:compID},
+                {$set:{"compdata.carm.score": score/denom}}
+            );
         });
-    }), function(){
-        console.log(score/denom);
-        db.collection('comparisons').update({compID:compID},
-            {$set:{"carm.score": score/denom}}
-        );
-    };
-
+    });
 }
 
 function addComp(othermeal, query) {
