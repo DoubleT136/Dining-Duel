@@ -30,9 +30,9 @@ function getLocation() { // gets user's location
 }
 
 function indicateCloserDiningHall() {
-	console.log("You: "+myLat+" "+myLong);
-	console.log("Dewick: "+dewickDistance.latitude+" "+dewickDistance.longitude);
-	console.log("Carm: "+carmDistance.latitude+" "+carmDistance.longitude);
+	// console.log("You: "+myLat+" "+myLong);
+	// console.log("Dewick: "+dewickDistance.latitude+" "+dewickDistance.longitude);
+	// console.log("Carm: "+carmDistance.latitude+" "+carmDistance.longitude);
 	calcDistance(dewickDistance);
 	calcDistance(carmDistance);
 
@@ -68,7 +68,7 @@ function calcDistance(dininghall) {
 
 	dininghall.distanceFrom = kmDistance;
 
-	console.log("Distance to "+dininghall.name+": "+kmDistance);
+	//console.log("Distance to "+dininghall.name+": "+kmDistance);
 }
 
 Number.prototype.toRad = function() {

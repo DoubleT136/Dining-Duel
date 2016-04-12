@@ -1,7 +1,10 @@
 carmResults = 0;
 dewickResults = 0;
 
+
+
 window.addEventListener('load', function() {
+
     $.ajax({
         url: '/getmealdata',
         data: {
@@ -29,6 +32,7 @@ window.addEventListener('load', function() {
                 // sort in order of most significant
                 result.carm.food_arr.sort(sortFoods);
                 result.dewick.food_arr.sort(sortFoods);
+
                 result.carm.food_arr.forEach(function(item, index) {
                     $("#leftfoods").append(function() {
                         return $("<div>").append(function() {
@@ -42,10 +46,22 @@ window.addEventListener('load', function() {
                                 return $("<div>").html(item.name).attr({
                                     class: 'food-title'
                                 });
-                            }).append(function() {
-                                return $("<div>").html(' Ups: ' + item.up);
-                            }).append(function() {
-                                return $("<div>").html(' Downs: ' + item.down);
+                            }).append(function() { // add carm upvote
+                                var carmUPvoteDIV = $("<div id=upvote>").html("<button type='button' class='btn btn-success upButton'>√ " + item.up + "</button>");
+                                carmUPvoteDIV.click(function(){
+                                    item.up++;
+                                    // item in database = item.up
+                                    carmUPvoteDIV.html("<button type='button' class='btn btn-success upButton'>√ " + item.up + "</button>");
+                                });
+                                return carmUPvoteDIV;
+                            }).append(function() { // add carm downvote
+                                var carmDOWNvoteDIV = $("<div id=downvote>").html("<button type='button' class='btn btn-danger downButton'>X " + item.down+"</button>");
+                                carmDOWNvoteDIV.click(function(){
+                                    item.down++;
+                                    // item in database = item.down
+                                    carmDOWNvoteDIV.html("<button type='button' class='btn btn-danger downButton'>X "+ item.down+"</button>");
+                                });
+                                return carmDOWNvoteDIV;
                             }).attr({
                                 class: 'food-desc'
                             });
@@ -68,10 +84,22 @@ window.addEventListener('load', function() {
                                     return $("<div>").html(item.name).attr({
                                         class: 'food-title'
                                     });
-                                }).append(function() {
-                                    return $("<div>").html(' Ups: ' + item.up);
-                                }).append(function() {
-                                    return $("<div>").html(' Downs: ' + item.down);
+                                }).append(function() { // add dewick up vote
+                                    var dewickUPvoteDIV = $("<div id=upvote>").html("<button type='button' class='btn btn-success upButton'>√ " + item.up + "</button>");
+                                    dewickUPvoteDIV.click(function(){
+                                        item.up++;
+                                        // item in database = item.up
+                                        dewickUPvoteDIV.html("<button type='button' class='btn btn-success upButton'>√ " + item.up + "</button>");
+                                    });
+                                    return dewickUPvoteDIV;
+                                }).append(function() { // add dewick down vote
+                                    var dewickDOWNvoteDIV = $("<div id=downvote>").html("<button type='button' class='btn btn-danger downButton'>X " + item.down+"</button>");
+                                    dewickDOWNvoteDIV.click(function(){
+                                        item.down++;
+                                        // item in database = item.down
+                                        dewickDOWNvoteDIV.html("<button type='button' class='btn btn-danger downButton'>X " + item.down+"</button>");
+                                    });
+                                    return dewickDOWNvoteDIV;
                                 }).attr({
                                     class: 'food-desc'
                                 });

@@ -24,8 +24,5 @@ function numbers() {
 	dewPerc = 100-carmPerc;
 	dewPerc = keepAboveFifteen(dewPerc);
 	dewick.attributes.style.nodeValue = "width:"+dewPerc+"%";
-
-	//console.log("carmPerc: "+carmPerc+ " | dewPerc: "+dewPerc);
-	//console.log(carm.attributes.style.nodeValue + " " +dewick.attributes.style.nodeValue);
 }
 
