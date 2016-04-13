@@ -11,95 +11,57 @@ body {
 }
 
 .left {
-    text-align: left;
-    max-width: 50%;
+    /*text-align: left;*/
+    width: 50%;
     float: left;
-    /*margin-right: 10px;*/
+    min-height: 100%;
 }
 
 .right {
     float: right;
-    max-width: 50%;
-    text-align: right;
-    /*margin-left: 10px;*/
-
-}
-
-.carm-bar {
     width: 50%;
-    padding: 10px 0;
-    background-color: #7878E5;
+    /*text-align: right;*/
+    min-height: 100%;
 }
 
-.dew-bar {
+.food-thumbnail {
+    height: 50%;
+    margin: 2px;
+    display: inline-block;
+}
+
+.food-item {
     width: 50%;
-    padding: 10px 0;
-    background-color: #86E886;
-}
-
-#leftfoods {
-    /*
-    margin-right: 100px;
-    margin-left: 0px;
-    */
-}
-
-#rightfoods {
-    /*margin-left: 0px;*/
-}
-
-.carm-text {
-    margin: 20px;
-}
-
-.dew-text {
-    margin: 20px;
-}
-
-.left-food-thumbnail {
-    margin-right: 20px;
-}
-
-.right-food-thumbnail {
-    margin-left: 20px;
-}
-
-.inline {
-    display: inline;
+    height: auto;
 }
 
 /* NEW ADDITIONS */
 #carm {
-    background-image: none;
     background-color: #8e5925;
 }
 
 #dewick {
-    background-image: none;
-    background-color: #417DC1; /* Tufts Blue */
+    background-color: #417DC1; 
 }
 
-.carmtitle {
-    background-color: #7878E5;
-}
-
-.dewicktitle {
-    background-color: #86E886;
+div > .btn {
+   width: 50px;
+   height: 30px;
+   margin: 2px;
 }
 
 .progress {
     height: 100px;
-/*    border-radius: 50px;
-*/}
+}
 
 .progress span {
     /*color: #000000;*/
-    color: #333;
-    text-shadow:
+    color: #222;
+/*    text-shadow:
        -1px -1px 0 #ffffff,  
         1px -1px 0 #ffffff,
         -1px 1px 0 #ffffff,
-         1px 1px 0 #ffffff;
+         1px 1px 0 #ffffff;*/
     font-weight: bold;
     font-size: 5em;
     text-align: center;
@@ -115,26 +77,87 @@ body {
     }
 }
 
-.food-desc {
-    display: inline-block;
-    max-width: 60%;
-}
-
 .food-title {
-    width: 100%;
-    font-size: 30px;
+    width: 50%;
     font-weight: bold;
     font-family: Philosopher;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.right-block {
+    right: 0;
+}
+
+.left-block {
+    left: 0;
 }
 
 .upButton {
     display: block;
     width: 50%;
-    float:left;
+    float: left;
 }
 
 .downButton {
     display: block;
     width: 50%;
-    float:right;
+    float: right;
+}
+
+.food-block:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+
+.food-block {
+    width: 48%;
+    height: 0;
+    padding-top: 48%;
+    margin: 1%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+}
+
+.desc {
+    width: 100%;
+    height: 23%;
+    bottom: 0;
+    position: absolute;
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .5));
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.right-align {
+    text-align: right;
+}
+
+.left-align {
+    text-align: left;
+}
+
+@media (max-width: 992px) {
+    .food-block {
+        width: 98%;
+        height: 0;
+        padding-top: 98%;
+        margin: 1%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        border-radius: 3px;
+        display: inline-block;
+    }
+}
+
+.voting {
+    margin: 15px;
 }
