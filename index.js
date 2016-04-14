@@ -59,10 +59,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/getmealdata', function(req, res) {
-    var day = req.query.day;
-    var month = req.query.month;
-    var year = req.query.year;
-    var meal = req.query.meal;
+    var day = req.query.day.replace(/[<>]/g, "");
+    var month = req.query.month.replace(/[<>]/g, "");
+    var year = req.query.year.replace(/[<>]/g, "");
+    var meal = req.query.meal.replace(/[<>]/g, "");
     if (!day || !month || !year || !meal) {
         res.sendStatus(404);
         return;
@@ -87,6 +87,7 @@ app.get('/getmealdata', function(req, res) {
                         return;
                     }
                     dewMenu = JSON.parse(body);
+                    console.log(dewMenu);
                     initComp(carmMenu.data[meal], dewMenu.data[meal], function(comparison) {
                         var toAdd = {};
                         toAdd.compID = compKey;
@@ -108,17 +109,17 @@ app.get('/getmealdata', function(req, res) {
             res.end();
         }
     });
-
 });
 
 /* Think about this: return ONLY WHAT IS NECESSARY,
 and then update everything else secondary */
 app.post('/upvote', function(req, res) {
-    var foodName = req.body.food;
-    var compID = req.body.compID;
+    var foodName = req.body.food.replace(/[<>]/g, '');
+    var compID = req.body.compID.replace(/[<>]/g, '');
     // TODO: check if foodname is a valid foodname
 
-    // go to comparisons, update votes
+    // go to comparisons, update votes for all comparison objects containing
+    // the food
     db.collection('comparisons').update({
         "compdata.carm.food_arr": {
             $elemMatch: {
@@ -135,7 +136,7 @@ app.post('/upvote', function(req, res) {
         multi: true
     }, function(err1, count1, result1) {
         if (err1) {
-            res.send(500);
+            res.sendStatus(500);
             return;
         }
 
@@ -160,7 +161,7 @@ app.post('/upvote', function(req, res) {
             multi: true
         }, function(err2, count2, result2) {
             if (err2) {
-                res.send(500);
+                res.sendStatus(500);
                 return;
             }
 
@@ -172,7 +173,7 @@ app.post('/upvote', function(req, res) {
 
             db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
                 if (!result) {
-                    res.send(500);
+                    res.sendStatus(500);
                 } else {
                     res.send(result.compdata);
                 }
@@ -191,8 +192,8 @@ app.post('/upvote', function(req, res) {
 });
 
 app.post('/downvote', function(req, res) {
-    var foodName = req.body.food;
-    var compID = req.body.compID;
+    var foodName = req.body.food.replace(/[<>]/g, "");
+    var compID = req.body.compID.replace(/[<>]/g, "");
     // TODO: check if foodname is a valid foodname
 
     // go to comparisons, update votes
@@ -212,7 +213,7 @@ app.post('/downvote', function(req, res) {
         multi: true
     }, function(err1, count1, result1) {
         if (err1) {
-            res.send(500);
+            res.sendStatus(500);
             return;
         }
 
@@ -237,7 +238,7 @@ app.post('/downvote', function(req, res) {
             multi: true
         }, function(err2, count2, result2) {
             if (err2) {
-                res.send(500);
+                res.sendStatus(500);
                 return;
             }
 
@@ -249,7 +250,7 @@ app.post('/downvote', function(req, res) {
 
             db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
                 if (!result) {
-                    res.send(500);
+                    res.sendStatus(500);
                 } else {
                     res.send(result.compdata);
                 }
@@ -267,18 +268,69 @@ app.post('/downvote', function(req, res) {
     });
 });
 
+app.post('/addfoodimgurl', function(req, res) {
+    var url = req.body.url;
+    var foodName = req.body.food.replace(/[<>]/g, "");
+    // go to comparisons, update image
+    db.collection('comparisons').update({
+        "compdata.carm.food_arr": {
+            $elemMatch: {
+                name: foodName
+            }
+        }
+    }, {
+        $set: {
+            "compdata.carm.food_arr.$.imgurl": url
+        }
+    }, {
+        multi: true
+    }, function(err1, count1, result1) {
+        if (err1) {
+            res.sendStatus(500);
+            return;
+        }
+
+        db.collection('comparisons').update({
+            "compdata.dewick.food_arr": {
+                $elemMatch: {
+                    name: foodName
+                }
+            }
+        }, {
+            $set: {
+                "compdata.dewick.food_arr.$.imgurl": url
+            }
+        }, {
+            multi: true
+        }, function(err2, count2, result2) {
+            if (err2) {
+                res.sendStatus(500);
+            } else {
+                res.sendStatus(200);
+            }
+        });
+    });
+
+    // go to foods collection, and update that.
+    db.collection('foods').update({
+        name: foodName,
+    }, {
+        $set: {
+            imgurl: url
+        }
+    });
+});
+
 function updateDewScore(compID) {
     var score = 0; // TODO: USE THIS
     var denom = 0;
-    db.collection('comparisons').find({compID:compID}).forEach(function(data){
+    db.collection('comparisons').find({ compID: compID }).forEach(function(data) {
         async.each(data.compdata.dewick.food_arr, function(food, callback2) {
             score += (food.up * food.weight) / (food.up + food.down + 1);
             denom += food.weight;
             callback2();
         }, function(err) {
-            db.collection('comparisons').update({compID:compID},
-                {$set:{"compdata.dewick.score": score/denom}}
-            );
+            db.collection('comparisons').update({ compID: compID }, { $set: { "compdata.dewick.score": score / denom } });
         });
     });
 }
@@ -286,15 +338,13 @@ function updateDewScore(compID) {
 function updateCarmScore(compID) {
     var score = 0;
     var denom = 0;
-    db.collection('comparisons').find({compID:compID}).forEach(function(data){
+    db.collection('comparisons').find({ compID: compID }).forEach(function(data) {
         async.each(data.compdata.carm.food_arr, function(food, callback2) {
             score += (food.up * food.weight) / (food.up + food.down + 1);
             denom += food.weight;
             callback2();
         }, function(err) {
-            db.collection('comparisons').update({compID:compID},
-                {$set:{"compdata.carm.score": score/denom}}
-            );
+            db.collection('comparisons').update({ compID: compID }, { $set: { "compdata.carm.score": score / denom } });
         });
     });
 }
@@ -344,7 +394,11 @@ function getFoodsAndScore(menu, callback) {
 
 function checkForFood(foodType, foodname, callback) {
     var query = {};
-    foodname = foodname.replace(/[\."$]/g, "");
+    try {
+        foodname = foodname.replace(/[\."$]/g, "");
+    } catch (err) {
+        console.log(foodType);
+    }
     query.name = foodname;
     db.collection('foods').findOne(query, function(err, result) {
         if (!result) {
@@ -363,4 +417,3 @@ function checkForFood(foodType, foodname, callback) {
         }
     });
 }
-

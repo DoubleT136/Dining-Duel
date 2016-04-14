@@ -9,8 +9,8 @@ window.addEventListener('load', function() {
         url: '/getmealdata',
         data: {
             meal: 'Dinner',
-            day: 28,
-            month: 3,
+            day: 15,
+            month: 4,
             year: 2016
         },
         success: function(result) {
@@ -56,11 +56,11 @@ function createItem(item, position) {
                 class: 'food-title ' + position + '-align ' + position + '-block'
             });
         }).append(function() {
-            return $('<div>').html(item.up-item.down).attr({
+            return $('<div>').html(item.up - item.down).attr({
                 class: 'food-score ' + position + '-align ' + position + '-block'
             });
         }).append(function() {
-            console.log(item.up-item.down);
+            console.log(item.up - item.down);
             return $('<div>').append(function() {
                 return $('<button>').attr({
                     class: 'btn btn-success'
@@ -83,7 +83,7 @@ function createItem(item, position) {
         });
     }).attr({
         class: 'food-block',
-        style: 'background-image: url(' + item.imgurl +');'
+        style: 'background-image: url(' + item.imgurl + ');'
     }).append({
 
     });
