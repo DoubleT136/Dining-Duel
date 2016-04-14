@@ -56,6 +56,11 @@ function createItem(item, position) {
                 class: 'food-title ' + position + '-align ' + position + '-block'
             });
         }).append(function() {
+            return $('<div>').html(item.up-item.down).attr({
+                class: 'food-score ' + position + '-align ' + position + '-block'
+            });
+        }).append(function() {
+            console.log(item.up-item.down);
             return $('<div>').append(function() {
                 return $('<button>').attr({
                     class: 'btn btn-success'

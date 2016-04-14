@@ -79,14 +79,27 @@ div > .btn {
 
 .food-title {
     width: 50%;
+    font-size: 150%;
     font-weight: bold;
     font-family: Philosopher;
     color: white;
     position: absolute;
     bottom: 0;
-    margin-bottom: 5%;
+    margin-bottom: 70%;
     margin-left: 2%;
     margin-right: 2%;
+}
+
+.food-score {
+    width: 50%;
+    font-size: 20px;
+    font-family: Arial;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 .right-block {
@@ -155,6 +168,20 @@ div > .btn {
         background-repeat: no-repeat;
         border-radius: 3px;
         display: inline-block;
+    }
+}
+
+@media (max-width: 500px) {
+    .food-title {
+        font-size: 100%;
+    }
+
+    .food-score {
+        font-size: 15px;
+    }
+
+    .voting {
+        margin: 20px;
     }
 }
 
