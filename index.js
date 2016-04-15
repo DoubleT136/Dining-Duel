@@ -126,7 +126,14 @@ app.post('/upvote', function(req, res) {
     if (!("userID" in cookie)) {
         userID = shortid.generate();
         res.cookie("userID", userID);
-        db.collection("users").insert({"_id": userID, "votes": {"food":[{foodName:"up"}]}});
+        db.collection("users").insert({
+            "_id": userID,
+            "votes": {
+                "food": [
+                    { foodName: "up" }
+                ]
+            }
+        });
         new_user = true;
     } else {
         userID = cookie.userID;
@@ -145,7 +152,7 @@ app.post('/upvote', function(req, res) {
         }, {
             $inc: {
                 "compdata.carm.food_arr.$.up": 1 //,
-                // "compdata.carm.score": carmScoreChange
+                    // "compdata.carm.score": carmScoreChange
             }
 
         }, {
@@ -171,7 +178,7 @@ app.post('/upvote', function(req, res) {
             }, {
                 $inc: {
                     "compdata.dewick.food_arr.$.up": 1 //,
-                    // "compdata.dewick.score": dewScoreChange
+                        // "compdata.dewick.score": dewScoreChange
                 },
             }, {
                 multi: true
@@ -205,7 +212,7 @@ app.post('/upvote', function(req, res) {
                 ups: 1
             }
         });
-    } else{
+    } else {
         res.send({});
     }
 });
@@ -438,5 +445,5 @@ function checkForFood(foodType, foodname, callback) {
 }
 
 function hasUpvoted(userID, foodName) {
-    db.collection("users").findOne({"_id": userID}, function(err, result){});
+    db.collection("users").findOne({ "_id": userID }, function(err, result) {});
 }
