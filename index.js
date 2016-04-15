@@ -3,6 +3,8 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var request = require('request');
 var async = require('async');
+var cookieParser = require('cookie-parser');
+var shortid = require('shortid');
 var app = express();
 
 var mongoUri = process.env.MONGOLAB_URI || "mongodb://localhost:27017/dining";
@@ -49,7 +51,8 @@ var weights = {
     'CHAR-GRILL STATIONS': 30,
     'HOT BREAKFAST CEREAL BAR': 5,
     'FRESH BAKED DESSERTS': 15,
-    'BREAKFAST POTATO': 30
+    'BREAKFAST POTATO': 30,
+    'LATE NIGHT': 0
 };
 
 var tddAPI = 'https://tuftsdiningdata.herokuapp.com/menus/';
@@ -57,6 +60,7 @@ var tddAPI = 'https://tuftsdiningdata.herokuapp.com/menus/';
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.get('/getmealdata', function(req, res) {
     var day = req.query.day.replace(/[<>]/g, "");
@@ -116,79 +120,94 @@ and then update everything else secondary */
 app.post('/upvote', function(req, res) {
     var foodName = req.body.food.replace(/[<>]/g, '');
     var compID = req.body.compID.replace(/[<>]/g, '');
-    // TODO: check if foodname is a valid foodname
+    var cookie = req.cookies;
+    var new_user = false;
+    var userID;
+    if (!("userID" in cookie)) {
+        userID = shortid.generate();
+        res.cookie("userID", userID);
+        db.collection("users").insert({"_id": userID, "votes": {"food":[{foodName:"up"}]}});
+        new_user = true;
+    } else {
+        userID = cookie.userID;
+    }
+    if (new_user === true || hasUpvoted(userID, foodName) !== true) {
+        // TODO: check if foodname is a valid foodname
 
-    // go to comparisons, update votes for all comparison objects containing
-    // the food
-    db.collection('comparisons').update({
-        "compdata.carm.food_arr": {
-            $elemMatch: {
-                name: foodName
-            }
-        }
-    }, {
-        $inc: {
-            "compdata.carm.food_arr.$.up": 1 //,
-                // "compdata.carm.score": carmScoreChange
-        }
-
-    }, {
-        multi: true
-    }, function(err1, count1, result1) {
-        if (err1) {
-            res.sendStatus(500);
-            return;
-        }
-
-        if (count1 !== 0) {
-            // update score (can we do it in the update function?)
-            // pass the weight and vote too? for constant-time update
-            updateCarmScore(compID);
-        }
-
+        // go to comparisons, update votes for all comparison objects containing
+        // the food
         db.collection('comparisons').update({
-            "compdata.dewick.food_arr": {
+            "compdata.carm.food_arr": {
                 $elemMatch: {
                     name: foodName
                 }
             }
         }, {
             $inc: {
-                "compdata.dewick.food_arr.$.up": 1 //,
-                    // "compdata.dewick.score": dewScoreChange
-            },
+                "compdata.carm.food_arr.$.up": 1 //,
+                // "compdata.carm.score": carmScoreChange
+            }
+
         }, {
             multi: true
-        }, function(err2, count2, result2) {
-            if (err2) {
+        }, function(err1, count1, result1) {
+            if (err1) {
                 res.sendStatus(500);
                 return;
             }
 
-            if (count2 !== 0) {
+            if (count1 !== 0) {
                 // update score (can we do it in the update function?)
                 // pass the weight and vote too? for constant-time update
-                updateDewScore(compID);
+                updateCarmScore(compID);
             }
 
-            db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
-                if (!result) {
-                    res.sendStatus(500);
-                } else {
-                    res.send(result.compdata);
+            db.collection('comparisons').update({
+                "compdata.dewick.food_arr": {
+                    $elemMatch: {
+                        name: foodName
+                    }
                 }
+            }, {
+                $inc: {
+                    "compdata.dewick.food_arr.$.up": 1 //,
+                    // "compdata.dewick.score": dewScoreChange
+                },
+            }, {
+                multi: true
+            }, function(err2, count2, result2) {
+                if (err2) {
+                    res.sendStatus(500);
+                    return;
+                }
+
+                if (count2 !== 0) {
+                    // update score (can we do it in the update function?)
+                    // pass the weight and vote too? for constant-time update
+                    updateDewScore(compID);
+                }
+
+                db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
+                    if (!result) {
+                        res.sendStatus(500);
+                    } else {
+                        res.send(result.compdata);
+                    }
+                });
             });
         });
-    });
 
-    // go to foods collection, and update that.
-    db.collection('foods').update({
-        name: foodName,
-    }, {
-        $inc: {
-            ups: 1
-        }
-    });
+        // go to foods collection, and update that.
+        db.collection('foods').update({
+            name: foodName,
+        }, {
+            $inc: {
+                ups: 1
+            }
+        });
+    } else{
+        res.send({});
+    }
 });
 
 app.post('/downvote', function(req, res) {
@@ -416,4 +435,8 @@ function checkForFood(foodType, foodname, callback) {
             callback(result);
         }
     });
+}
+
+function hasUpvoted(userID, foodName) {
+    db.collection("users").findOne({"_id": userID}, function(err, result){});
 }

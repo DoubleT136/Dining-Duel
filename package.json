@@ -7,9 +7,12 @@
     "async": "^2.0.0-rc.2",
     "body-parser": "^1.15.0",
     "bootstrap": "^3.3.6",
+    "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
+    "keygrip": "^1.0.1",
     "mongodb": "^2.1.11",
-    "request": "^2.69.0"
+    "request": "^2.69.0",
+    "shortid": "^2.2.6"
   },
   "devDependencies": {},
   "scripts": {
