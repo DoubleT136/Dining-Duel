@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var shortid = require('shortid');
 var app = express();
 
-var mongoUri = process.env.MONGOLAB_URI || "mongodb://localhost:27017/dining";
+var mongoUri = process.env.MONGODB_URI || process.env.MONGOLAB_URI || "mongodb://localhost:27017/dining";
 var MongoClient = require('mongodb').MongoClient;
 var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
     db = databaseConnection;
