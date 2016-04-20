@@ -92,8 +92,8 @@ app.get('/getmealdata', function(req, res) {
         if (!result) {
             var carmMenu, dewMenu, comparison;
             var apiarg = '/' + day + '/' + month + '/' + year;
-            // keep track of whether or not the comparison object actually has
-            // any data
+            // keep track of whether or not the comparison 
+            // object actually has any data
             var valid = false;
 
             request(tddAPI + 'carm' + apiarg, function(error, response, body) {
@@ -215,8 +215,6 @@ app.post('/upvote', function(req, res) {
                 }
 
                 if (count1 !== 0) {
-                    // update score (can we do it in the update function?)
-                    // pass the weight and vote too? for constant-time update
                     updateCarmScore(compID);
                 }
 
@@ -239,8 +237,6 @@ app.post('/upvote', function(req, res) {
                     }
 
                     if (count2 !== 0) {
-                        // update score (can we do it in the update function?)
-                        // pass the weight and vote too? for constant-time update
                         updateDewScore(compID);
                     }
 
@@ -330,8 +326,6 @@ app.post('/downvote', function(req, res) {
                 }
 
                 if (count1 !== 0) {
-                    // update score (can we do it in the update function?)
-                    // pass the weight and vote too? for constant-time update
                     updateCarmScore(compID);
                 }
 
@@ -343,8 +337,7 @@ app.post('/downvote', function(req, res) {
                     }
                 }, {
                     $inc: {
-                        "compdata.dewick.food_arr.$.down": 1 //,
-                            // "compdata.dewick.score": dewScoreChange
+                        "compdata.dewick.food_arr.$.down": 1
                     },
                 }, {
                     multi: true
@@ -355,8 +348,6 @@ app.post('/downvote', function(req, res) {
                     }
 
                     if (count2 !== 0) {
-                        // update score (can we do it in the update function?)
-                        // pass the weight and vote too? for constant-time update
                         updateDewScore(compID);
                     }
 
@@ -385,6 +376,7 @@ app.post('/downvote', function(req, res) {
 app.post('/addfoodimgurl', function(req, res) {
     var url = req.body.url;
     var foodName = req.body.food.replace(/[<>]/g, "");
+
     // go to comparisons, update image
     db.collection('comparisons').update({
         "compdata.carm.food_arr": {
@@ -436,7 +428,7 @@ app.post('/addfoodimgurl', function(req, res) {
 });
 
 function updateDewScore(compID) {
-    var score = 0; // TODO: USE THIS
+    var score = 0;
     var denom = 0;
     db.collection('comparisons').find({ compID: compID }).forEach(function(data) {
         async.each(data.compdata.dewick.food_arr, function(food, callback2) {
@@ -444,7 +436,13 @@ function updateDewScore(compID) {
             denom += food.weight;
             callback2();
         }, function(err) {
-            db.collection('comparisons').update({ compID: compID }, { $set: { "compdata.dewick.score": score / denom } });
+            db.collection('comparisons').update({
+                compID: compID
+            }, {
+                $set: {
+                    "compdata.dewick.score": score / denom
+                }
+            });
         });
     });
 }
@@ -458,7 +456,13 @@ function updateCarmScore(compID) {
             denom += food.weight;
             callback2();
         }, function(err) {
-            db.collection('comparisons').update({ compID: compID }, { $set: { "compdata.carm.score": score / denom } });
+            db.collection('comparisons').update({
+                compID: compID
+            }, {
+                $set: {
+                    "compdata.carm.score": score / denom
+                }
+            });
         });
     });
 }
@@ -487,7 +491,7 @@ function initComp(carmMenu, dewMenu, callback) {
 
 function getFoodsAndScore(menu, callback) {
     var foodArr = [];
-    var score = 0; // TODO: USE THIS
+    var score = 0;
     var denom = 0;
     async.forEachOf(menu, function(typearr, type, callback1) {
         type = type.trim();
@@ -521,8 +525,8 @@ function checkForFood(foodType, foodname, callback) {
                 imgurl: 'http://placehold.it/400/eeba93?text=No+Image+Found',
                 type: foodType,
                 weight: wt,
-                up: Math.floor(Math.random() * 50),
-                down: Math.floor(Math.random() * 30)
+                up: 0,
+                down: 0
             };
             callback(toAdd);
             db.collection('foods').insert(toAdd, function() {});
