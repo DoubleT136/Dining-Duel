@@ -21,13 +21,13 @@ var weights = {
     'CARVED MEATS & POULTRY': 30,
     'Hearty Soups': 25,
     'VEGETARIAN': 30,
-    'VEGETABLES': 5,
+    'VEGETABLES': 20,
     'BREADS & ROLLS': 10,
     'DINNER ENTREES': 50,
     'PASTA & SAUCES': 30,
     'SAUCES, GRAVIES & TOPPINGS': 20,
     'SAUCES,GRAVIES & TOPPINGS': 20,
-    'PIZZA': 25,
+    'PIZZA': 30,
     'GRILL SELECTIONS': 40,
     'POTATO & RICE ACCOMPANIMENTS': 35,
     'BAKED FRESH DESSERTS': 40,
@@ -40,6 +40,7 @@ var weights = {
     'AFTERNOON WOK': 25,
     'DELI & PANINI': 10,
     'MORNING BELGIUM WAFFLE BAR': 1,
+    'BELGIAN WAFFLES': 1,
     'HOT BREAKFAST CEREAL': 5,
     'BRK BREADS,PASTRY & TOPPINGS': 15,
     'BREAKFAST MEAT': 25,
@@ -52,7 +53,19 @@ var weights = {
     'HOT BREAKFAST CEREAL BAR': 5,
     'FRESH BAKED DESSERTS': 15,
     'BREAKFAST POTATO': 30,
-    'LATE NIGHT': 0
+    'LATE NIGHT': 0,
+    'SUNDAE BAR': 15,
+    'APPETIZER': 30,
+    'BRUNCH CHAR-GRILL SELECTIONS': 20,
+    'BRUNCH GRILL SELECTIONS': 20,
+    'ASSORTED FRESH FRUIT': 15,
+    'SPECIALITY SALADS': 25,
+    'SPECIALTY SALADS': 25,
+    'CREATE-YOUR-OWN': 18,
+    'PARFAIT BAR': 5,
+    'BREAKFAST FRUIT & YOGURT': 10,
+    'CREATE YOUR OWN MEDITERRANEAN': 20,
+    'BRK BREADS,PASTRIES & TOPPINGS': 15
 };
 
 var tddAPI = 'https://tuftsdiningdata.herokuapp.com/menus/';
@@ -75,35 +88,60 @@ app.get('/getmealdata', function(req, res) {
     var query = {};
     query.compID = compKey;
     db.collection('comparisons').findOne(query, function(err, result) {
+        
         if (!result) {
             var carmMenu, dewMenu, comparison;
             var apiarg = '/' + day + '/' + month + '/' + year;
+            // keep track of whether or not the comparison object actually has 
+            // any data
+            var valid = false;
+
             request(tddAPI + 'carm' + apiarg, function(error, response, body) {
+
                 if (error) {
                     res.sendStatus(500);
                     return;
                 }
+
                 carmMenu = JSON.parse(body);
+                // check if data has populated
+                if (Object.keys(carmMenu.data.Dinner).length !== 0 || Object.keys(carmMenu.data.Lunch).length !== 0 || Object.keys(carmMenu.data.Breakfast).length !== 0) {
+                    valid = true;
+                }
+
                 // instead of hard coding the 'dewick', we could make it more dynamic by allowing user to specify args (requires change to comparisons structure)
                 request(tddAPI + 'dewick' + apiarg, function(error, response, body) {
+
                     if (error) {
                         res.sendStatus(500);
                         return;
                     }
+
                     dewMenu = JSON.parse(body);
-                    console.log(dewMenu);
-                    initComp(carmMenu.data[meal], dewMenu.data[meal], function(comparison) {
-                        var toAdd = {};
-                        toAdd.compID = compKey;
-                        toAdd.compdata = comparison;
-                        res.json(comparison);
-                        res.end();
-                        db.collection('comparisons').insert(toAdd, function() {});
-                    });
+                    if (!valid && (Object.keys(carmMenu.data.Dinner).length !== 0 || Object.keys(carmMenu.data.Lunch).length !== 0 || Object.keys(carmMenu.data.Breakfast).length !== 0)) {
+                        valid = true;
+                    }
+
+                    // check if it is a bad query
+                    if (valid) {
+                        initComp(carmMenu.data[meal], dewMenu.data[meal], function(comparison) {
+                            var toAdd = {};
+                            toAdd.compID = compKey;
+                            toAdd.compdata = comparison;
+                            res.json(comparison);
+                            res.end();
+                            db.collection('comparisons').insert(toAdd, function() {});
+                        });
+                    } else {
+                        res.sendStatus(400);
+                    }
+
                     // since we already retrieved the menu data, we add the other meals too
-                    for (var othermeal in carmMenu.data) {
-                        if (othermeal != meal) {
-                            initComp(carmMenu.data[othermeal], dewMenu.data[othermeal], addComp(othermeal, req.query));
+                    if (valid) {
+                        for (var othermeal in carmMenu.data) {
+                            if (othermeal != meal) {
+                                initComp(carmMenu.data[othermeal], dewMenu.data[othermeal], addComp(othermeal, req.query));
+                            }
                         }
                     }
                 });
@@ -177,8 +215,7 @@ app.post('/upvote', function(req, res) {
                 }
             }, {
                 $inc: {
-                    "compdata.dewick.food_arr.$.up": 1 //,
-                        // "compdata.dewick.score": dewScoreChange
+                    "compdata.dewick.food_arr.$.up": 1
                 },
             }, {
                 multi: true
@@ -420,21 +457,21 @@ function getFoodsAndScore(menu, callback) {
 
 function checkForFood(foodType, foodname, callback) {
     var query = {};
-    try {
-        foodname = foodname.replace(/[\."$]/g, "");
-    } catch (err) {
-        console.log(foodType);
-    }
+    foodname = foodname.replace(/[\."$]/g, "");
     query.name = foodname;
     db.collection('foods').findOne(query, function(err, result) {
         if (!result) {
+            var wt = weights[foodType];
+            if (wt == null) {
+                wt = "ADD WEIGHT";
+            }
             var toAdd = {
                 name: foodname,
                 imgurl: 'http://placehold.it/400/eeba93?text=No+Image+Found',
                 type: foodType,
-                weight: weights[foodType], //delete this?
-                up: Math.floor((Math.random() + Math.random() + Math.random()) * 10),
-                down: Math.floor((Math.random() + Math.random() + Math.random()) * 10)
+                weight: wt,
+                up: Math.floor(Math.random() * 50),
+                down: Math.floor(Math.random() * 30)
             };
             callback(toAdd);
             db.collection('foods').insert(toAdd, function() {});

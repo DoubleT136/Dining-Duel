@@ -14,28 +14,27 @@
 
     <!-- New style -->
     <link rel="stylesheet" href="/css/style.css" type="text/css"/>
-    <link rel="stylesheet" type="text/css"
-          href="https://fonts.googleapis.com/css?family=Philosopher">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Philosopher">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
 
     <!-- Scripts -->
     <script type="text/javascript" src="/js/init.js"></script>
-    <script src="js/competition_bar/mod.js"></script>
-    <script src="js/competition_bar/numSource.js"></script>
-    <script src="js/closer_dining_hall/closerdininghall.js"></script>
+    <script src="js/loadBar.js"></script>
+    <script src="js/closerdininghall.js"></script>
 </head>
 
 <body onload="getLocation()">
-<div class="container">
-    <br>
-    <div class="progress">
-        <div id="carm" class="progress-bar" role="progressbar" style="width:40%">
-            <span>Carmichael</span>
-        </div>
-        <div id="dewick" class="progress-bar" role="progressbar" style="width:10%">
-            <span>Dewick</span>
-        </div>
+<br>
+<div class="progress">
+    <div id="carm" class="progress-bar" role="progressbar">
+        Carmichael
     </div>
+    <div id="dewick" class="progress-bar" role="progressbar">
+        Dewick
+    </div>
+</div>
 
+<div class="container">
     <div>
         <span class="left" id="leftfoods">
         </span>

@@ -1,190 +1,192 @@
 /* todo: use Bootstrap container instead to style everything
-EVERYTHING is in a grid, remember that. Look into using React 
+EVERYTHING is in a grid, remember that. Look into using React
 to render front end, because only updates what has changed*/
 
 body {
-    /*background-color: #38171a;*/
-    font-family: Helvetica;
-    font-weight: 200;
-    padding: 0;
-    margin: 0;
+  background-color: #fec;
+  font-family: Philosopher;
+  font-weight: 200;
+  margin: 0;
+  padding: 0;
 }
 
 .left {
-    /*text-align: left;*/
-    width: 50%;
-    float: left;
-    min-height: 100%;
+  float: left;
+  min-height: 100%;
+  width: 50%;
 }
 
 .right {
-    float: right;
-    width: 50%;
-    /*text-align: right;*/
-    min-height: 100%;
+  float: right;
+  min-height: 100%;
+  width: 50%;
 }
 
 .food-thumbnail {
-    height: 50%;
-    margin: 2px;
-    display: inline-block;
+  display: inline-block;
+  height: 50%;
+  margin: 2px;
 }
 
 .food-item {
-    width: 50%;
-    height: auto;
+  height: auto;
+  width: 50%;
 }
 
-/* NEW ADDITIONS */
 #carm {
-    background-color: #8e5925;
+  background-color: #8e5925;
+  -moz-transition: width 1s;
+  -o-transition: width 1s;
+  -webkit-transition: width 1s;
+  transition: width 1s;
+  width: 15%;
 }
 
 #dewick {
-    background-color: #417DC1; 
+  background-color: #417DC1;
+  float: right;
+  -moz-transition: width 1s;
+  -o-transition: width 1s;
+  -webkit-transition: width 1s;
+  transition: width 1s;
+  width: 15%;
 }
 
 div > .btn {
-   width: 50px;
-   height: 30px;
-   margin: 2px;
+  margin: 2px;
 }
 
 .progress {
-    height: 100px;
+  background: #000;
+  border-radius: 0;
+  height: 50px;
+  width: 100%;
 }
 
-.progress span {
-    /*color: #000000;*/
-    color: #222;
-/*    text-shadow:
-       -1px -1px 0 #ffffff,  
-        1px -1px 0 #ffffff,
-        -1px 1px 0 #ffffff,
-         1px 1px 0 #ffffff;*/
-    font-weight: bold;
-    font-size: 5em;
-    text-align: center;
-    vertical-align: middle;
-    width: 100%;
-    padding-top: 40px;
-    display: inline-block;
+.progress-bar {
+  font-size: 38px;
+  line-height: inherit;
 }
 
 @media (max-width: 700px) {
-    .progress span {
-        font-size: 3em;
-    }
+  .progress span {
+    font-size: 3em;
+  }
 }
 
 .food-title {
-    width: 50%;
-    font-size: 150%;
-    font-weight: bold;
-    font-family: Philosopher;
-    color: white;
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 70%;
-    margin-left: 2%;
-    margin-right: 2%;
+  bottom: 0;
+  color: #fff;
+  font-size: 120%;
+  font-weight: bold;
+  margin-bottom: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+  position: absolute;
+  width: 50%;
 }
 
 .food-score {
-    width: 50%;
-    font-size: 20px;
-    font-family: Arial;
-    color: white;
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 5%;
-    margin-left: 5%;
-    margin-right: 5%;
+  color: #fff;
+  display: inline-block;
+  font-size: 130%;
+  margin: 10px;
 }
 
 .right-block {
-    right: 0;
+  right: 0;
 }
 
 .left-block {
-    left: 0;
+  left: 0;
 }
 
-.upButton {
-    display: block;
-    width: 50%;
-    float: left;
+.up-button {
+  display: block;
+  float: left;
+  width: 50%;
 }
 
-.downButton {
-    display: block;
-    width: 50%;
-    float: right;
+.down-button {
+  display: block;
+  float: right;
+  width: 50%;
 }
 
-.food-block:before {
-    content: "";
-    display: block;
-    padding-top: 100%;
+.food-block::before {
+  display: block;
+  padding-top: 100%;
 }
 
 .food-block {
-    width: 48%;
-    height: 0;
-    padding-top: 48%;
-    margin: 1%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    border-radius: 3px;
-    display: inline-block;
-    position: relative;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 5px;
+  display: inline-block;
+  height: 0;
+  padding-top: 60%;
+  position: relative;
+  width: 99%;
 }
 
 .desc {
-    width: 100%;
-    height: 23%;
-    bottom: 0;
-    position: absolute;
-    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .5));
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .5));
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  bottom: 0;
+  height: 18%;
+  position: absolute;
+  width: 100%;
 }
 
 .right-align {
-    text-align: right;
+  text-align: right;
 }
 
 .left-align {
-    text-align: left;
+  text-align: left;
 }
 
 @media (max-width: 992px) {
-    .food-block {
-        width: 98%;
-        height: 0;
-        padding-top: 98%;
-        margin: 1%;
-        background-size: contain;
-        background-repeat: no-repeat;
-        border-radius: 3px;
-        display: inline-block;
-    }
+  .food-block {
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 3px;
+    display: inline-block;
+    height: 0;
+    margin: 1%;
+    padding-top: 98%;
+    width: 98%;
+  }
+
+  .food-title {
+    font-size: 100%;
+  }
 }
 
 @media (max-width: 500px) {
-    .food-title {
-        font-size: 100%;
-    }
+  .food-score {
+    font-size: 15px;
+  }
 
-    .food-score {
-        font-size: 15px;
-    }
-
-    .voting {
-        margin: 20px;
-    }
+  .voting {
+    margin: 20px;
+  }
 }
 
-.voting {
-    margin: 15px;
+.voting-left {
+  bottom: 0;
+  margin: 5px;
+  position: absolute;
+  right: 0;
+  text-align: right;
+}
+
+.voting-right {
+  bottom: 0;
+  left: 0;
+  margin: 5px;
+  position: absolute;
+  text-align: left;
 }

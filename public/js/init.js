@@ -1,15 +1,16 @@
 carmResults = 0;
 dewickResults = 0;
 
-
+// note: there is currently an issue where the comparison doesnt work if one of the halls does not have a meal under that day.
 
 window.addEventListener('load', function() {
-
+    
     $.ajax({
         url: '/getmealdata',
+        dataType: 'json',
         data: {
-            meal: 'Dinner',
-            day: 15,
+            meal: 'Lunch',
+            day: 19,
             month: 4,
             year: 2016
         },
@@ -18,7 +19,6 @@ window.addEventListener('load', function() {
             dewickResults = result.dewick.score;
 
             loadBar();
-
             console.log(result);
             // sort in order of most significant
             result.carm.food_arr.sort(sortFoods);
@@ -56,12 +56,12 @@ function createItem(item, position) {
                 class: 'food-title ' + position + '-align ' + position + '-block'
             });
         }).append(function() {
-            return $('<div>').html(item.up - item.down).attr({
-                class: 'food-score ' + position + '-align ' + position + '-block'
-            });
-        }).append(function() {
-            console.log(item.up - item.down);
+            // console.log(item.up - item.down);
             return $('<div>').append(function() {
+                return $('<div>').html(item.up - item.down).attr({
+                    class: 'food-score'
+                });
+            }).append(function() {
                 return $('<button>').attr({
                     class: 'btn btn-success'
                 }).append(function() {
@@ -78,7 +78,7 @@ function createItem(item, position) {
                     });
                 });
             }).attr({
-                class: 'voting pull-' + opp
+                class: 'voting-' + position + ' pull-' + opp
             });
         });
     }).attr({

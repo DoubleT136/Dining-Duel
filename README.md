@@ -13,6 +13,9 @@ To inspect database:
 To install dependencies (--save to add to package.json):
     `npm install [dependency] --save`
 
+To populate a freshly cleared database:
+    `bash < add_images.sh`
+
 ### Problem statement
 Tufts students often have trouble deciding whether to eat at Carmichael or Dewick-Macphie dining hall. Dining Duel makes the choice easy, with a compiled cumulative score for each dining hall.
 
