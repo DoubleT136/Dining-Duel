@@ -88,11 +88,11 @@ app.get('/getmealdata', function(req, res) {
     var query = {};
     query.compID = compKey;
     db.collection('comparisons').findOne(query, function(err, result) {
-        
+
         if (!result) {
             var carmMenu, dewMenu, comparison;
             var apiarg = '/' + day + '/' + month + '/' + year;
-            // keep track of whether or not the comparison object actually has 
+            // keep track of whether or not the comparison object actually has
             // any data
             var valid = false;
 
@@ -153,8 +153,6 @@ app.get('/getmealdata', function(req, res) {
     });
 });
 
-/* Think about this: return ONLY WHAT IS NECESSARY,
-and then update everything else secondary */
 app.post('/upvote', function(req, res) {
     var foodName = req.body.food.replace(/[<>]/g, '');
     var compID = req.body.compID.replace(/[<>]/g, '');
@@ -164,169 +162,220 @@ app.post('/upvote', function(req, res) {
     if (!("userID" in cookie)) {
         userID = shortid.generate();
         res.cookie("userID", userID);
+        var query = [];
+        query[foodName] = "up";
         db.collection("users").insert({
             "_id": userID,
-            "votes": {
-                "food": [
-                    { foodName: "up" }
-                ]
-            }
+            "food": query
         });
         new_user = true;
     } else {
         userID = cookie.userID;
     }
-    if (new_user === true || hasUpvoted(userID, foodName) !== true) {
-        // TODO: check if foodname is a valid foodname
 
-        // go to comparisons, update votes for all comparison objects containing
-        // the food
-        db.collection('comparisons').update({
-            "compdata.carm.food_arr": {
-                $elemMatch: {
-                    name: foodName
-                }
-            }
-        }, {
-            $inc: {
-                "compdata.carm.food_arr.$.up": 1 //,
-                    // "compdata.carm.score": carmScoreChange
-            }
-
-        }, {
-            multi: true
-        }, function(err1, count1, result1) {
-            if (err1) {
-                res.sendStatus(500);
+    db.collection("users").findOne({ "_id": userID }, function(err, result) {
+        if (result === null) {
+            res.sendStatus(400);
+            return;
+        } else {
+            console.log(result.food);
+            if (looup_food(foodName, result.food) === "up" && new_user === false) {
+                res.send({});
                 return;
             }
-
-            if (count1 !== 0) {
-                // update score (can we do it in the update function?)
-                // pass the weight and vote too? for constant-time update
-                updateCarmScore(compID);
+            if (looup_food(foodName, result.food) === "down") {
+                var query = {};
+                query[foodName] = "down";
+                db.collection("users").update({"_id": userID}, {
+                    $pull: {"food": query}
+                });
             }
-
+            var query = {};
+            query[foodName] = "up";
+            db.collection("users").update({"_id": userID}, {
+                $addToSet: {"food": query}
+            });
             db.collection('comparisons').update({
-                "compdata.dewick.food_arr": {
+                "compdata.carm.food_arr": {
                     $elemMatch: {
                         name: foodName
                     }
                 }
             }, {
                 $inc: {
-                    "compdata.dewick.food_arr.$.up": 1
-                },
+                    "compdata.carm.food_arr.$.up": 1
+                }
             }, {
                 multi: true
-            }, function(err2, count2, result2) {
-                if (err2) {
+            }, function(err1, count1, result1) {
+                if (err1) {
                     res.sendStatus(500);
                     return;
                 }
 
-                if (count2 !== 0) {
+                if (count1 !== 0) {
                     // update score (can we do it in the update function?)
                     // pass the weight and vote too? for constant-time update
-                    updateDewScore(compID);
+                    updateCarmScore(compID);
                 }
 
-                db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
-                    if (!result) {
-                        res.sendStatus(500);
-                    } else {
-                        res.send(result.compdata);
+                db.collection('comparisons').update({
+                    "compdata.dewick.food_arr": {
+                        $elemMatch: {
+                            name: foodName
+                        }
                     }
+                }, {
+                    $inc: {
+                        "compdata.dewick.food_arr.$.up": 1
+                    },
+                }, {
+                    multi: true
+                }, function(err2, count2, result2) {
+                    if (err2) {
+                        res.sendStatus(500);
+                        return;
+                    }
+
+                    if (count2 !== 0) {
+                        // update score (can we do it in the update function?)
+                        // pass the weight and vote too? for constant-time update
+                        updateDewScore(compID);
+                    }
+
+                    db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
+                        if (!result) {
+                            res.sendStatus(500);
+                        } else {
+                            console.log('here');
+                            res.send(result.compdata);
+                        }
+                    });
                 });
             });
-        });
 
-        // go to foods collection, and update that.
-        db.collection('foods').update({
-            name: foodName,
-        }, {
-            $inc: {
-                ups: 1
-            }
-        });
-    } else {
-        res.send({});
-    }
+            // go to foods collection, and update that.
+            db.collection('foods').update({
+                name: foodName,
+            }, {
+                $inc: {
+                    ups: 1
+                }
+            });
+        }
+    });
 });
 
 app.post('/downvote', function(req, res) {
     var foodName = req.body.food.replace(/[<>]/g, "");
     var compID = req.body.compID.replace(/[<>]/g, "");
-    // TODO: check if foodname is a valid foodname
+    var cookie = req.cookies;
+    var new_user = false;
+    var userID;
+    if (!("userID" in cookie)) {
+        userID = shortid.generate();
+        res.cookie("userID", userID);
+        var query = [];
+        query[foodName] = "down";
+        db.collection("users").insert({
+            "_id": userID,
+            "food": query
+        });
+        new_user = true;
+    } else {
+        userID = cookie.userID;
+    }
 
-    // go to comparisons, update votes
-    db.collection('comparisons').update({
-        "compdata.carm.food_arr": {
-            $elemMatch: {
-                name: foodName
-            }
-        }
-    }, {
-        $inc: {
-            "compdata.carm.food_arr.$.down": 1 //,
-                // "compdata.carm.score": carmScoreChange
-        }
-
-    }, {
-        multi: true
-    }, function(err1, count1, result1) {
-        if (err1) {
-            res.sendStatus(500);
+    db.collection("users").findOne({ "_id": userID }, function(err, result) {
+        if (result === null) {
+            res.sendStatus(400);
             return;
-        }
-
-        if (count1 !== 0) {
-            // update score (can we do it in the update function?)
-            // pass the weight and vote too? for constant-time update
-            updateCarmScore(compID);
-        }
-
-        db.collection('comparisons').update({
-            "compdata.dewick.food_arr": {
-                $elemMatch: {
-                    name: foodName
-                }
-            }
-        }, {
-            $inc: {
-                "compdata.dewick.food_arr.$.down": 1 //,
-                    // "compdata.dewick.score": dewScoreChange
-            },
-        }, {
-            multi: true
-        }, function(err2, count2, result2) {
-            if (err2) {
-                res.sendStatus(500);
+        } else {
+            console.log(result.food);
+            if (looup_food(foodName, result.food) === "down" && new_user === false) {
+                res.send({});
                 return;
             }
-
-            if (count2 !== 0) {
-                // update score (can we do it in the update function?)
-                // pass the weight and vote too? for constant-time update
-                updateDewScore(compID);
+            if (looup_food(foodName, result.food) === "up") {
+                var query = {};
+                query[foodName] = "up";
+                db.collection("users").update({"_id": userID}, {
+                    $pull: {"food": query}
+                });
             }
+            var query = {};
+            query[foodName] = "down";
+            db.collection("users").update({"_id": userID}, {
+                $addToSet: {"food": query}
+            });
+            db.collection('comparisons').update({
+                "compdata.carm.food_arr": {
+                    $elemMatch: {
+                        name: foodName
+                    }
+                }
+            }, {
+                $inc: {
+                    "compdata.carm.food_arr.$.down": 1
+                }
 
-            db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
-                if (!result) {
+            }, {
+                multi: true
+            }, function(err1, count1, result1) {
+                if (err1) {
                     res.sendStatus(500);
-                } else {
-                    res.send(result.compdata);
+                    return;
+                }
+
+                if (count1 !== 0) {
+                    // update score (can we do it in the update function?)
+                    // pass the weight and vote too? for constant-time update
+                    updateCarmScore(compID);
+                }
+
+                db.collection('comparisons').update({
+                    "compdata.dewick.food_arr": {
+                        $elemMatch: {
+                            name: foodName
+                        }
+                    }
+                }, {
+                    $inc: {
+                        "compdata.dewick.food_arr.$.down": 1 //,
+                            // "compdata.dewick.score": dewScoreChange
+                    },
+                }, {
+                    multi: true
+                }, function(err2, count2, result2) {
+                    if (err2) {
+                        res.sendStatus(500);
+                        return;
+                    }
+
+                    if (count2 !== 0) {
+                        // update score (can we do it in the update function?)
+                        // pass the weight and vote too? for constant-time update
+                        updateDewScore(compID);
+                    }
+
+                    db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
+                        if (!result) {
+                            res.sendStatus(500);
+                        } else {
+                            res.send(result.compdata);
+                        }
+                    });
+                });
+            });
+
+            // go to foods collection, and update that.
+            db.collection('foods').update({
+                name: foodName,
+            }, {
+                $inc: {
+                    downs: 1
                 }
             });
-        });
-    });
-
-    // go to foods collection, and update that.
-    db.collection('foods').update({
-        name: foodName,
-    }, {
-        $inc: {
-            downs: 1
         }
     });
 });
@@ -481,6 +530,15 @@ function checkForFood(foodType, foodname, callback) {
     });
 }
 
-function hasUpvoted(userID, foodName) {
-    db.collection("users").findOne({ "_id": userID }, function(err, result) {});
+function looup_food(name, arr) {
+    for(var i = 0, len = arr.length; i < len; i++) {
+        console.log(arr[i]);
+        for (property in arr[i]){
+            if (property == name) {
+                console.log(arr[i][property]);
+                return arr[i][property];
+            }
+        }
+    }
+    return null;
 }
