@@ -17,7 +17,6 @@ window.addEventListener('load', function() {
         success: function(result) {
             carmResults = result.carm.score;
             dewickResults = result.dewick.score;
-
             loadBar();
             console.log(result);
             // sort in order of most significant
@@ -56,7 +55,6 @@ function createItem(item, position) {
                 class: 'food-title ' + position + '-align ' + position + '-block'
             });
         }).append(function() {
-            // console.log(item.up - item.down);
             return $('<div>').append(function() {
                 return $('<div>').html(item.up - item.down).attr({
                     class: 'food-score'
