@@ -30,7 +30,7 @@ var weights = {
     'PIZZA': 30,
     'GRILL SELECTIONS': 40,
     'POTATO & RICE ACCOMPANIMENTS': 35,
-    'BAKED FRESH DESSERTS': 40,
+    'BAKED FRESH DESSERTS': 15,
     'CREATE YOUR OWN STIRFRY': 5,
     'CHEESE & BREAD BAR': 10,
     'VEGETARIAN OPTIONS': 30,
@@ -159,10 +159,11 @@ app.post('/upvote', function(req, res) {
     var cookie = req.cookies;
     var new_user = false;
     var userID;
+    var query;
     if (!("userID" in cookie)) {
         userID = shortid.generate();
         res.cookie("userID", userID);
-        var query = [];
+        query = {};
         query[foodName] = "up";
         db.collection("users").insert({
             "_id": userID,
@@ -179,21 +180,21 @@ app.post('/upvote', function(req, res) {
             return;
         } else {
             console.log(result.food);
-            if (looup_food(foodName, result.food) === "up" && new_user === false) {
+            if (result.food[foodName] === "up" && new_user === false) {
                 res.send({});
                 return;
             }
-            if (looup_food(foodName, result.food) === "down") {
-                var query = {};
+            if (result.food[foodName] === "down") {
+                query = {};
                 query[foodName] = "down";
-                db.collection("users").update({"_id": userID}, {
-                    $pull: {"food": query}
+                db.collection("users").update({ "_id": userID }, {
+                    $pull: { "food": query }
                 });
             }
-            var query = {};
+            query = {};
             query[foodName] = "up";
-            db.collection("users").update({"_id": userID}, {
-                $addToSet: {"food": query}
+            db.collection("users").update({ "_id": userID }, {
+                $addToSet: { "food": query }
             });
             db.collection('comparisons').update({
                 "compdata.carm.food_arr": {
@@ -259,7 +260,7 @@ app.post('/upvote', function(req, res) {
                 name: foodName,
             }, {
                 $inc: {
-                    ups: 1
+                    up: 1
                 }
             });
         }
@@ -272,10 +273,11 @@ app.post('/downvote', function(req, res) {
     var cookie = req.cookies;
     var new_user = false;
     var userID;
+    var query;
     if (!("userID" in cookie)) {
         userID = shortid.generate();
         res.cookie("userID", userID);
-        var query = [];
+        query = {};
         query[foodName] = "down";
         db.collection("users").insert({
             "_id": userID,
@@ -292,21 +294,21 @@ app.post('/downvote', function(req, res) {
             return;
         } else {
             console.log(result.food);
-            if (looup_food(foodName, result.food) === "down" && new_user === false) {
+            if (result.food[foodName] === "down" && new_user === false) {
                 res.send({});
                 return;
             }
-            if (looup_food(foodName, result.food) === "up") {
-                var query = {};
+            if (result.food[foodName] === "up") {
+                query = {};
                 query[foodName] = "up";
-                db.collection("users").update({"_id": userID}, {
-                    $pull: {"food": query}
+                db.collection("users").update({ "_id": userID }, {
+                    $pull: { "food": query }
                 });
             }
-            var query = {};
+            query = {};
             query[foodName] = "down";
-            db.collection("users").update({"_id": userID}, {
-                $addToSet: {"food": query}
+            db.collection("users").update({ "_id": userID }, {
+                $addToSet: { "food": query }
             });
             db.collection('comparisons').update({
                 "compdata.carm.food_arr": {
@@ -373,7 +375,7 @@ app.post('/downvote', function(req, res) {
                 name: foodName,
             }, {
                 $inc: {
-                    downs: 1
+                    down: 1
                 }
             });
         }
@@ -528,17 +530,4 @@ function checkForFood(foodType, foodname, callback) {
             callback(result);
         }
     });
-}
-
-function looup_food(name, arr) {
-    for(var i = 0, len = arr.length; i < len; i++) {
-        console.log(arr[i]);
-        for (property in arr[i]){
-            if (property == name) {
-                console.log(arr[i][property]);
-                return arr[i][property];
-            }
-        }
-    }
-    return null;
 }
