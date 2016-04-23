@@ -1,5 +1,4 @@
 var express = require('express');
-var path = require('path');
 var bodyParser = require('body-parser');
 var request = require('request');
 var async = require('async');
@@ -7,9 +6,12 @@ var cookieParser = require('cookie-parser');
 var shortid = require('shortid');
 var app = express();
 
-var mongoUri = process.env.MONGODB_URI || process.env.MONGOLAB_URI || "mongodb://localhost:27017/dining";
+var mongoUri = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost:27017/dining';
 var MongoClient = require('mongodb').MongoClient;
 var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
+    if (error) {
+        console.log('Database not initialized');
+    }
     db = databaseConnection;
     app.set('port', (process.env.PORT || 5000));
     app.listen(app.get('port'), function() {
@@ -76,10 +78,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get('/getmealdata', function(req, res) {
-    var day = req.query.day.replace(/[<>]/g, "");
-    var month = req.query.month.replace(/[<>]/g, "");
-    var year = req.query.year.replace(/[<>]/g, "");
-    var meal = req.query.meal.replace(/[<>]/g, "");
+    var day = req.query.day.replace(/[<>]/g, '');
+    var month = req.query.month.replace(/[<>]/g, '');
+    var year = req.query.year.replace(/[<>]/g, '');
+    var meal = req.query.meal.replace(/[<>]/g, '');
     if (!day || !month || !year || !meal) {
         res.sendStatus(404);
         return;
@@ -88,16 +90,18 @@ app.get('/getmealdata', function(req, res) {
     var query = {};
     query.compID = compKey;
     db.collection('comparisons').findOne(query, function(err, result) {
-
+        if (err) {
+            res.sendStatus(500);
+            return;
+        }
         if (!result) {
-            var carmMenu, dewMenu, comparison;
+            var carmMenu, dewMenu;
             var apiarg = '/' + day + '/' + month + '/' + year;
-            // keep track of whether or not the comparison 
+            // keep track of whether or not the comparison
             // object actually has any data
             var valid = false;
 
             request(tddAPI + 'carm' + apiarg, function(error, response, body) {
-
                 if (error) {
                     res.sendStatus(500);
                     return;
@@ -111,7 +115,6 @@ app.get('/getmealdata', function(req, res) {
 
                 // instead of hard coding the 'dewick', we could make it more dynamic by allowing user to specify args (requires change to comparisons structure)
                 request(tddAPI + 'dewick' + apiarg, function(error, response, body) {
-
                     if (error) {
                         res.sendStatus(500);
                         return;
@@ -139,7 +142,7 @@ app.get('/getmealdata', function(req, res) {
                     // since we already retrieved the menu data, we add the other meals too
                     if (valid) {
                         for (var othermeal in carmMenu.data) {
-                            if (othermeal != meal) {
+                            if (othermeal !== meal) {
                                 initComp(carmMenu.data[othermeal], dewMenu.data[othermeal], addComp(othermeal, req.query));
                             }
                         }
@@ -158,53 +161,57 @@ app.post('/upvote', function(req, res) {
     var compID = req.body.compID.replace(/[<>]/g, '');
     var cookie = req.cookies;
     var new_user = false;
-    var userID;
-    var query;
-    if (!("userID" in cookie)) {
+    var userID, query;
+    if (!('userID' in cookie)) {
         userID = shortid.generate();
-        res.cookie("userID", userID);
+        res.cookie('userID', userID);
         query = {};
-        query[foodName] = "up";
-        db.collection("users").insert({
-            "_id": userID,
-            "food": query
+        query[foodName] = 'up';
+        db.collection('users').insert({
+            '_id': userID,
+            'food': query
         });
         new_user = true;
     } else {
         userID = cookie.userID;
     }
 
-    db.collection("users").findOne({ "_id": userID }, function(err, result) {
+    db.collection('users').findOne({ '_id': userID }, function(err, result) {
+        if (err) {
+            res.sendStatus(400);
+            return;
+        }
+
         if (result === null) {
             res.sendStatus(400);
             return;
         } else {
             console.log(result.food);
-            if (result.food[foodName] === "up" && new_user === false) {
+            if (result.food[foodName] === 'up' && new_user === false) {
                 res.send({});
                 return;
             }
-            if (result.food[foodName] === "down") {
+            if (result.food[foodName] === 'down') {
                 query = {};
-                query[foodName] = "down";
-                db.collection("users").update({ "_id": userID }, {
-                    $pull: { "food": query }
+                query[foodName] = 'down';
+                db.collection('users').update({ '_id': userID }, {
+                    $pull: { 'food': query }
                 });
             }
             query = {};
-            query[foodName] = "up";
-            db.collection("users").update({ "_id": userID }, {
-                $addToSet: { "food": query }
+            query[foodName] = 'up';
+            db.collection('users').update({ '_id': userID }, {
+                $addToSet: { 'food': query }
             });
             db.collection('comparisons').update({
-                "compdata.carm.food_arr": {
+                'compdata.carm.food_arr': {
                     $elemMatch: {
                         name: foodName
                     }
                 }
             }, {
                 $inc: {
-                    "compdata.carm.food_arr.$.up": 1
+                    'compdata.carm.food_arr.$.up': 1
                 }
             }, {
                 multi: true
@@ -219,15 +226,15 @@ app.post('/upvote', function(req, res) {
                 }
 
                 db.collection('comparisons').update({
-                    "compdata.dewick.food_arr": {
+                    'compdata.dewick.food_arr': {
                         $elemMatch: {
                             name: foodName
                         }
                     }
                 }, {
                     $inc: {
-                        "compdata.dewick.food_arr.$.up": 1
-                    },
+                        'compdata.dewick.food_arr.$.up': 1
+                    }
                 }, {
                     multi: true
                 }, function(err2, count2, result2) {
@@ -241,6 +248,11 @@ app.post('/upvote', function(req, res) {
                     }
 
                     db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
+                        if (err) {
+                            res.sendStatus(500);
+                            return;
+                        }
+
                         if (!result) {
                             res.sendStatus(500);
                         } else {
@@ -253,7 +265,7 @@ app.post('/upvote', function(req, res) {
 
             // go to foods collection, and update that.
             db.collection('foods').update({
-                name: foodName,
+                name: foodName
             }, {
                 $inc: {
                     up: 1
@@ -264,57 +276,61 @@ app.post('/upvote', function(req, res) {
 });
 
 app.post('/downvote', function(req, res) {
-    var foodName = req.body.food.replace(/[<>]/g, "");
-    var compID = req.body.compID.replace(/[<>]/g, "");
+    var foodName = req.body.food.replace(/[<>]/g, '');
+    var compID = req.body.compID.replace(/[<>]/g, '');
     var cookie = req.cookies;
     var new_user = false;
-    var userID;
-    var query;
-    if (!("userID" in cookie)) {
+    var userID, query;
+    if (!('userID' in cookie)) {
         userID = shortid.generate();
-        res.cookie("userID", userID);
+        res.cookie('userID', userID);
         query = {};
-        query[foodName] = "down";
-        db.collection("users").insert({
-            "_id": userID,
-            "food": query
+        query[foodName] = 'down';
+        db.collection('users').insert({
+            '_id': userID,
+            'food': query
         });
         new_user = true;
     } else {
         userID = cookie.userID;
     }
 
-    db.collection("users").findOne({ "_id": userID }, function(err, result) {
+    db.collection('users').findOne({ '_id': userID }, function(err, result) {
+        if (err) {
+            res.sendStatus(500);
+            return;
+        }
+
         if (result === null) {
             res.sendStatus(400);
             return;
         } else {
             console.log(result.food);
-            if (result.food[foodName] === "down" && new_user === false) {
+            if (result.food[foodName] === 'down' && new_user === false) {
                 res.send({});
                 return;
             }
-            if (result.food[foodName] === "up") {
+            if (result.food[foodName] === 'up') {
                 query = {};
-                query[foodName] = "up";
-                db.collection("users").update({ "_id": userID }, {
-                    $pull: { "food": query }
+                query[foodName] = 'up';
+                db.collection('users').update({ '_id': userID }, {
+                    $pull: { 'food': query }
                 });
             }
             query = {};
-            query[foodName] = "down";
-            db.collection("users").update({ "_id": userID }, {
-                $addToSet: { "food": query }
+            query[foodName] = 'down';
+            db.collection('users').update({ '_id': userID }, {
+                $addToSet: { 'food': query }
             });
             db.collection('comparisons').update({
-                "compdata.carm.food_arr": {
+                'compdata.carm.food_arr': {
                     $elemMatch: {
                         name: foodName
                     }
                 }
             }, {
                 $inc: {
-                    "compdata.carm.food_arr.$.down": 1
+                    'compdata.carm.food_arr.$.down': 1
                 }
 
             }, {
@@ -330,15 +346,15 @@ app.post('/downvote', function(req, res) {
                 }
 
                 db.collection('comparisons').update({
-                    "compdata.dewick.food_arr": {
+                    'compdata.dewick.food_arr': {
                         $elemMatch: {
                             name: foodName
                         }
                     }
                 }, {
                     $inc: {
-                        "compdata.dewick.food_arr.$.down": 1
-                    },
+                        'compdata.dewick.food_arr.$.down': 1
+                    }
                 }, {
                     multi: true
                 }, function(err2, count2, result2) {
@@ -352,6 +368,11 @@ app.post('/downvote', function(req, res) {
                     }
 
                     db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
+                        if (err) {
+                            res.sendStatus(500);
+                            return;
+                        }
+
                         if (!result) {
                             res.sendStatus(500);
                         } else {
@@ -363,7 +384,7 @@ app.post('/downvote', function(req, res) {
 
             // go to foods collection, and update that.
             db.collection('foods').update({
-                name: foodName,
+                name: foodName
             }, {
                 $inc: {
                     down: 1
@@ -375,18 +396,18 @@ app.post('/downvote', function(req, res) {
 
 app.post('/addfoodimgurl', function(req, res) {
     var url = req.body.url;
-    var foodName = req.body.food.replace(/[<>]/g, "");
+    var foodName = req.body.food.replace(/[<>]/g, '');
 
     // go to comparisons, update image
     db.collection('comparisons').update({
-        "compdata.carm.food_arr": {
+        'compdata.carm.food_arr': {
             $elemMatch: {
                 name: foodName
             }
         }
     }, {
         $set: {
-            "compdata.carm.food_arr.$.imgurl": url
+            'compdata.carm.food_arr.$.imgurl': url
         }
     }, {
         multi: true
@@ -397,14 +418,14 @@ app.post('/addfoodimgurl', function(req, res) {
         }
 
         db.collection('comparisons').update({
-            "compdata.dewick.food_arr": {
+            'compdata.dewick.food_arr': {
                 $elemMatch: {
                     name: foodName
                 }
             }
         }, {
             $set: {
-                "compdata.dewick.food_arr.$.imgurl": url
+                'compdata.dewick.food_arr.$.imgurl': url
             }
         }, {
             multi: true
@@ -419,7 +440,7 @@ app.post('/addfoodimgurl', function(req, res) {
 
     // go to foods collection, and update that.
     db.collection('foods').update({
-        name: foodName,
+        name: foodName
     }, {
         $set: {
             imgurl: url
@@ -436,11 +457,14 @@ function updateDewScore(compID) {
             denom += food.weight;
             callback2();
         }, function(err) {
+            if (err) {
+                return;
+            }
             db.collection('comparisons').update({
                 compID: compID
             }, {
                 $set: {
-                    "compdata.dewick.score": score / denom
+                    'compdata.dewick.score': score / denom
                 }
             });
         });
@@ -456,11 +480,14 @@ function updateCarmScore(compID) {
             denom += food.weight;
             callback2();
         }, function(err) {
+            if (err) {
+                return;
+            }
             db.collection('comparisons').update({
                 compID: compID
             }, {
                 $set: {
-                    "compdata.carm.score": score / denom
+                    'compdata.carm.score': score / denom
                 }
             });
         });
@@ -480,10 +507,10 @@ function initComp(carmMenu, dewMenu, callback) {
     var comp = {};
     getFoodsAndScore(carmMenu, function(foodArr, score) {
         console.log(score);
-        comp.carm = { "food_arr": foodArr, "score": score };
+        comp.carm = { 'food_arr': foodArr, 'score': score };
         getFoodsAndScore(dewMenu, function(foodArr, score) {
             console.log(score);
-            comp.dewick = { "food_arr": foodArr, "score": score };
+            comp.dewick = { 'food_arr': foodArr, 'score': score };
             callback(comp);
         });
     });
@@ -503,22 +530,33 @@ function getFoodsAndScore(menu, callback) {
                 callback2();
             });
         }, function(err) {
+            if (err) {
+                return;
+            }
+
             callback1();
         });
     }, function(err) {
+        if (err) {
+            return;
+        }
         callback(foodArr, score / denom);
     });
 }
 
 function checkForFood(foodType, foodname, callback) {
     var query = {};
-    foodname = foodname.replace(/[\."$]/g, "");
+    foodname = foodname.replace(/[\.'$]/g, '');
     query.name = foodname;
     db.collection('foods').findOne(query, function(err, result) {
+        if (err) {
+            return;
+        }
+
         if (!result) {
             var wt = weights[foodType];
             if (wt == null) {
-                wt = "ADD WEIGHT";
+                wt = 'ADD WEIGHT';
             }
             var toAdd = {
                 name: foodname,
