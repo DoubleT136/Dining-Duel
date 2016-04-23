@@ -35,23 +35,21 @@ body {
 
 #carm {
   background-color: #8e5925;
-  -moz-transition: all .3s;
-  -o-transition: all .3s;
-  -webkit-transition: all .3s;
-  transition: all .3s;
+  -moz-transition: width 1s;
+  -o-transition: width 1s;
+  -webkit-transition: width 1s;
+  transition: width 1s;
   width: 49.8%;
-  text-align: left;
 }
 
 #dewick {
   background-color: #417DC1;
   float: right;
-  -moz-transition: all .3s;
-  -o-transition: all .3s;
-  -webkit-transition: all .3s;
-  transition: all .3s;
+  -moz-transition: width 1s;
+  -o-transition: width 1s;
+  -webkit-transition: width 1s;
+  transition: width 1s;
   width: 49.8%;
-  text-align: right;
 }
 
 div > .btn {
@@ -63,10 +61,6 @@ div > .btn {
   border-radius: 0;
   height: 100px;
   width: 100%;
-  -moz-transition: all .3s;
-  -o-transition: all .3s;
-  -webkit-transition: all .3s;
-  transition: all .3s;
 }
 
 .progress-bar {
@@ -210,26 +204,4 @@ div > .btn {
 .fixed {
   position: fixed;
   z-index: 100;
-}
-
-.top-nav-collapse {
-  height: 30px;
-  -moz-transition: all .3s ease;
-  -o-transition: all .3s ease;
-  -webkit-transition: all .3s ease;
-  transition: all .3s ease;
-}
-
-.top-nav-collapse > #dewick {
-  font-size: 20px;
-  text-align: right;
-  line-height: 30px;
-  /*margin: 10px;*/
-}
-
-.top-nav-collapse > #carm {
-  font-size: 20px;
-  text-align: left;
-  line-height: 30px;
-  /*margin: 10px;*/
 }

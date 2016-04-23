@@ -1,16 +1,10 @@
 carmResults = 0;
 dewickResults = 0;
 
-//jQuery to collapse the navbar on scroll
-$(window).scroll(function() {
-    if ($(".progress").offset().top > 50) {
-        $(".fixed").addClass("top-nav-collapse");
-    } else {
-        $(".fixed").removeClass("top-nav-collapse");
-    }
-});
+// note: there is currently an issue where the comparison doesnt work if one of the halls does not have a meal under that day.
 
 window.addEventListener('load', function() {
+    
     $.ajax({
         url: '/getmealdata',
         dataType: 'json',
