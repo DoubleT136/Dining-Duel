@@ -30,23 +30,17 @@ function getLocation() { // gets user's location
 }
 
 function indicateCloserDiningHall() {
-	// console.log("You: "+myLat+" "+myLong);
-	// console.log("Dewick: "+dewickDistance.latitude+" "+dewickDistance.longitude);
-	// console.log("Carm: "+carmDistance.latitude+" "+carmDistance.longitude);
 	calcDistance(dewickDistance);
 	calcDistance(carmDistance);
 
 	// reveal closer dining hall
 	if (dewickDistance.distanceFrom < carmDistance.distanceFrom) {
-		console.log("You are closer to Dewick");
+		$("#dewick").css({"color" : "yellow", "font-weight" : "bold"});
 	}
 	else if (dewickDistance.distanceFrom > carmDistance.distanceFrom) {
 		console.log("You are closer to Carm");
+		$("#carm").css({"color" : "yellow", "font-weight" : "bold"});
 	}
-	else if (dewickDistance.distanceFrom === carmDistance.distanceFrom) {
-		console.log("You are equally close to both Carm and Dewick");
-	}
-
 }
 
 function calcDistance(dininghall) {

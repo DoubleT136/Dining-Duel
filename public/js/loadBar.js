@@ -2,9 +2,6 @@
 
 function loadBar() {
 
-    console.log(carmResults);
-    console.log(dewickResults);
-
     totalResults = carmResults + dewickResults;
 
     carmPerc = carmResults / totalResults * 100;
