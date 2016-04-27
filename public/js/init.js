@@ -69,8 +69,7 @@ function createItem(item, position) {
                 });
             }).append(function() {
                 return $('<button>').attr({
-                    //class: 'btn btn-failure'
-                    class: 'btn btn-success'
+                    class: 'btn btn-danger'
                 }).append(function() {
                     return $('<span>').attr({
                         class: 'glyphicon glyphicon-menu-down'
