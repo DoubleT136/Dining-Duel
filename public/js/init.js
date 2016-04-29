@@ -9,8 +9,8 @@ window.addEventListener('load', function() {
         url: '/getmealdata',
         dataType: 'json',
         data: {
-            meal: 'Lunch',
-            day: 19,
+            meal: 'Dinner',
+            day: 27,
             month: 4,
             year: 2016
         },
