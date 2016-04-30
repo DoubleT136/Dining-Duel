@@ -19,7 +19,6 @@ window.addEventListener('load', function() {
             carmResults = result.compdata.carm.score;
             dewickResults = result.compdata.dewick.score;
             loadBar();
-            console.log("lol");
             console.log(result);
             // sort in order of most significant
             result.compdata.carm.food_arr.sort(sortFoods);
@@ -27,13 +26,13 @@ window.addEventListener('load', function() {
 
             result.compdata.carm.food_arr.forEach(function(item, index) {
                 $('#leftfoods').append(function() {
-                    return createItem(item, 'left');
+                    return createItem(item, 'left', result.compID);
                 });
             });
             // sort in order of most significant
             result.compdata.dewick.food_arr.forEach(function(item, index) {
                 $('#rightfoods').append(function() {
-                    return createItem(item, 'right');
+                    return createItem(item, 'right', result.compID);
                 });
             });
         }
@@ -44,7 +43,7 @@ function sortFoods(a, b) {
     return ((b.up - b.down) * b.weight) - ((a.up - a.down) * a.weight);
 }
 
-function createItem(item, position) {
+function createItem(item, position, compID) {
     console.log("new");
     var opp = 'right';
     if (position === 'right') {
@@ -66,31 +65,17 @@ function createItem(item, position) {
                 return $('<button>').attr({
                     class: 'btn btn-success'
                 }).click( function() {
-                    item.up++;
-                    $(this).parent().find('.food-score').html(item.up - item.down);
-
-                    console.log(item._id);
-                    console.log(item.name);
-
+                    var displayScore = $(this).parent().find('.food-score');
                     $.ajax({
                         method: 'POST',
                         url: '/upvote',
                         data: {
                             food: item.name,
-                            compID: item._id // WHAT GOES HERE???
+                            compID: compID
                         }
                     }).done(function(result) {
-                        console.log('WOO!');
-                        console.log(result);
+                        setScore(position,result,item,displayScore);
                     });
-                    
-                    //     success: function(result) {
-                    //         console.log("WOO");
-                    //     }
-                    // });
-
-
-
                 }).append(function() {
                     return $('<span>').attr({
                         class: 'glyphicon glyphicon-menu-up'
@@ -100,24 +85,17 @@ function createItem(item, position) {
                 return $('<button>').attr({
                     class: 'btn btn-danger'
                 }).click( function() {
-                    item.down++;
-                    $(this).parent().find('.food-score').html(item.up - item.down);
-
-                    /*
+                    var displayScore = $(this).parent().find('.food-score');
                     $.ajax({
                         method: 'POST',
-                        url: '/upvote',
+                        url: '/downvote',
                         data: {
                             food: item.name,
-                            compID: item._id // WHAT GOES HERE?
+                            compID: compID
                         }
                     }).done(function(result) {
-                        console.log('WOO!');
-                        console.log(result);
+                        setScore(position,result,item,displayScore);
                     });
-                    */
-
-
                 }).append(function() {
                     return $('<span>').attr({
                         class: 'glyphicon glyphicon-menu-down'
@@ -182,6 +160,75 @@ function createItem(item, position) {
     //     });
     // });
 
+}
+
+// changes the displayed score of an item on the page
+function setScore(position,result,item,displayScore) {
+
+    if (position === 'left'){ // carm
+
+        // updates score on clicked button's block
+        for (x in result.compdata.carm.food_arr) {
+            if (result.compdata.carm.food_arr[x].name === item.name) {
+                var carm_food_item = result.compdata.carm.food_arr[x];
+                displayScore.html(carm_food_item.up-carm_food_item.down);
+            }
+        }
+
+        // updates score on identical item in other dining hall (WHY???)
+        var tempStore = $(rightfoods).find('.food-block');
+        tempStore.each(function() {
+            if($(this).find('.food-title')[0].innerHTML === item.name) {
+                var newScore = $(this).find('.food-score');
+                newScore.html(carm_food_item.up-carm_food_item.down);
+            }
+        });
+
+    } else if (position === 'right') { // dewick
+
+        // updates score on clicked button's block
+        for (y in result.compdata.dewick.food_arr) {
+            if (result.compdata.dewick.food_arr[y].name === item.name) {
+                var dew_food_item = result.compdata.dewick.food_arr[y];
+                displayScore.html(dew_food_item.up-dew_food_item.down);
+            }
+        }
+
+        // updates score on identical item in other dining hall
+        var tempStore = $(leftfoods).find('.food-block');
+        tempStore.each(function() {
+            if($(this).find('.food-title')[0].innerHTML === item.name) {
+                var newScore = $(this).find('.food-score');
+                newScore.html(dew_food_item.up-dew_food_item.down);
+            }
+        });
+    }
+
+
+
+
+
+/*
+    // carm
+    if (position === 'left') {
+        for (x in result.compdata.carm.food_arr) {
+            if (result.compdata.carm.food_arr[x].name === item.name) {
+                var carm_food_item = result.compdata.carm.food_arr[x];
+                displayScore.html(carm_food_item.up-carm_food_item.down);
+            }
+        }
+    } 
+
+    // dewick
+    else {
+        for (y in result.compdata.dewick.food_arr) {
+            if (result.compdata.dewick.food_arr[y].name === item.name) {
+                var dew_food_item = result.compdata.dewick.food_arr[y];
+                displayScore.html(dew_food_item.up-dew_food_item.down);
+            }
+        }
+    }
+*/
 }
 
 // React.js: call this.setState() in react. check also: componentDidMount
