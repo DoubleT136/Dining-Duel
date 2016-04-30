@@ -150,7 +150,7 @@ app.get('/getmealdata', function(req, res) {
                 });
             });
         } else {
-            res.json(result.compdata);
+            res.json(result);
             res.end();
         }
     });
@@ -265,7 +265,7 @@ app.post('/upvote', function(req, res) {
                             res.sendStatus(500);
                         } else {
                             console.log('here');
-                            res.send(result.compdata);
+                            res.send(result);
                         }
                     });
                 });
@@ -390,7 +390,7 @@ app.post('/downvote', function(req, res) {
                             console.log(4);
                             res.sendStatus(500);
                         } else {
-                            res.send(result.compdata);
+                            res.send(result);
                         }
                     });
                 });

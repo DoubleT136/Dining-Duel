@@ -10,28 +10,28 @@ window.addEventListener('load', function() {
         url: '/getmealdata',
         dataType: 'json',
         data: {
-            meal: 'Dinner',
-            day: 27,
+            meal: 'Lunch',
+            day: 30,
             month: 4,
             year: 2016
         },
         success: function(result) {
-            carmResults = result.carm.score;
-            dewickResults = result.dewick.score;
+            carmResults = result.compdata.carm.score;
+            dewickResults = result.compdata.dewick.score;
             loadBar();
             console.log("lol");
             console.log(result);
             // sort in order of most significant
-            result.carm.food_arr.sort(sortFoods);
-            result.dewick.food_arr.sort(sortFoods);
+            result.compdata.carm.food_arr.sort(sortFoods);
+            result.compdata.dewick.food_arr.sort(sortFoods);
 
-            result.carm.food_arr.forEach(function(item, index) {
+            result.compdata.carm.food_arr.forEach(function(item, index) {
                 $('#leftfoods').append(function() {
                     return createItem(item, 'left');
                 });
             });
             // sort in order of most significant
-            result.dewick.food_arr.forEach(function(item, index) {
+            result.compdata.dewick.food_arr.forEach(function(item, index) {
                 $('#rightfoods').append(function() {
                     return createItem(item, 'right');
                 });
