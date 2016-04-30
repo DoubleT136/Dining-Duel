@@ -162,6 +162,7 @@ app.post('/upvote', function(req, res) {
     var cookie = req.cookies;
     var new_user = false;
     var userID, query;
+
     if (!('userID' in cookie)) {
         userID = shortid.generate();
         res.cookie('userID', userID);
@@ -217,6 +218,7 @@ app.post('/upvote', function(req, res) {
                 multi: true
             }, function(err1, count1, result1) {
                 if (err1) {
+                    console.log(0);
                     res.sendStatus(500);
                     return;
                 }
@@ -239,6 +241,7 @@ app.post('/upvote', function(req, res) {
                     multi: true
                 }, function(err2, count2, result2) {
                     if (err2) {
+                        console.log(1);
                         res.sendStatus(500);
                         return;
                     }
@@ -249,11 +252,16 @@ app.post('/upvote', function(req, res) {
 
                     db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
                         if (err) {
+                            console.log(2);
                             res.sendStatus(500);
                             return;
                         }
 
+                        console.log(result);
+                        console.log(err);
+
                         if (!result) {
+                            console.log(3);
                             res.sendStatus(500);
                         } else {
                             console.log('here');
@@ -296,7 +304,9 @@ app.post('/downvote', function(req, res) {
     }
 
     db.collection('users').findOne({ '_id': userID }, function(err, result) {
+
         if (err) {
+            console.log(0);
             res.sendStatus(500);
             return;
         }
@@ -337,6 +347,7 @@ app.post('/downvote', function(req, res) {
                 multi: true
             }, function(err1, count1, result1) {
                 if (err1) {
+                    console.log(1);
                     res.sendStatus(500);
                     return;
                 }
@@ -359,6 +370,7 @@ app.post('/downvote', function(req, res) {
                     multi: true
                 }, function(err2, count2, result2) {
                     if (err2) {
+                        console.log(2);
                         res.sendStatus(500);
                         return;
                     }
@@ -369,11 +381,13 @@ app.post('/downvote', function(req, res) {
 
                     db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
                         if (err) {
+                            console.log(3);
                             res.sendStatus(500);
                             return;
                         }
 
                         if (!result) {
+                            console.log(4);
                             res.sendStatus(500);
                         } else {
                             res.send(result.compdata);
