@@ -131,7 +131,7 @@ app.get('/getmealdata', function(req, res) {
                             var toAdd = {};
                             toAdd.compID = compKey;
                             toAdd.compdata = comparison;
-                            res.json(comparison);
+                            res.json(toAdd);
                             res.end();
                             db.collection('comparisons').insert(toAdd, function() {});
                         });
