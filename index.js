@@ -131,6 +131,7 @@ app.get('/getmealdata', function(req, res) {
                             var toAdd = {};
                             toAdd.compID = compKey;
                             toAdd.compdata = comparison;
+                            // the most important line in this entire file
                             res.json(toAdd);
                             res.end();
                             db.collection('comparisons').insert(toAdd, function() {});
@@ -150,6 +151,8 @@ app.get('/getmealdata', function(req, res) {
                 });
             });
         } else {
+            updateDewScore(compKey);
+            updateCarmScore(compKey);
             res.json(result);
             res.end();
         }
@@ -187,7 +190,6 @@ app.post('/upvote', function(req, res) {
             res.sendStatus(400);
             return;
         } else {
-            console.log(result.food);
             if (result.food[foodName] === 'up' && new_user === false) {
                 res.send({});
                 return;
@@ -218,7 +220,6 @@ app.post('/upvote', function(req, res) {
                 multi: true
             }, function(err1, count1, result1) {
                 if (err1) {
-                    console.log(0);
                     res.sendStatus(500);
                     return;
                 }
@@ -241,7 +242,6 @@ app.post('/upvote', function(req, res) {
                     multi: true
                 }, function(err2, count2, result2) {
                     if (err2) {
-                        console.log(1);
                         res.sendStatus(500);
                         return;
                     }
@@ -252,19 +252,14 @@ app.post('/upvote', function(req, res) {
 
                     db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
                         if (err) {
-                            console.log(2);
                             res.sendStatus(500);
                             return;
                         }
 
-                        console.log(result);
-                        console.log(err);
 
                         if (!result) {
-                            console.log(3);
                             res.sendStatus(500);
                         } else {
-                            console.log('here');
                             res.send(result);
                         }
                     });
@@ -306,7 +301,6 @@ app.post('/downvote', function(req, res) {
     db.collection('users').findOne({ '_id': userID }, function(err, result) {
 
         if (err) {
-            console.log(0);
             res.sendStatus(500);
             return;
         }
@@ -315,7 +309,6 @@ app.post('/downvote', function(req, res) {
             res.sendStatus(400);
             return;
         } else {
-            console.log(result.food);
             if (result.food[foodName] === 'down' && new_user === false) {
                 res.send({});
                 return;
@@ -347,7 +340,6 @@ app.post('/downvote', function(req, res) {
                 multi: true
             }, function(err1, count1, result1) {
                 if (err1) {
-                    console.log(1);
                     res.sendStatus(500);
                     return;
                 }
@@ -370,7 +362,6 @@ app.post('/downvote', function(req, res) {
                     multi: true
                 }, function(err2, count2, result2) {
                     if (err2) {
-                        console.log(2);
                         res.sendStatus(500);
                         return;
                     }
@@ -381,13 +372,11 @@ app.post('/downvote', function(req, res) {
 
                     db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
                         if (err) {
-                            console.log(3);
                             res.sendStatus(500);
                             return;
                         }
 
                         if (!result) {
-                            console.log(4);
                             res.sendStatus(500);
                         } else {
                             res.send(result);
@@ -520,10 +509,8 @@ function addComp(othermeal, query) {
 function initComp(carmMenu, dewMenu, callback) {
     var comp = {};
     getFoodsAndScore(carmMenu, function(foodArr, score) {
-        console.log(score);
         comp.carm = { 'food_arr': foodArr, 'score': score };
         getFoodsAndScore(dewMenu, function(foodArr, score) {
-            console.log(score);
             comp.dewick = { 'food_arr': foodArr, 'score': score };
             callback(comp);
         });

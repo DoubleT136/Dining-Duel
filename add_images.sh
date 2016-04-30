@@ -1,6 +1,7 @@
 #!/bin/bash
 # template:
 # curl --data "url=&food=" http://localhost:5000/addfoodimgurl
+curl --data "url=https://lh3.googleusercontent.com/-N7-oLdH9Rh4/VxVRUuTRDsI/AAAAAAAAAHE/GhOxZETZwn4bnkBocmWFcNNPyayIOdzUQCCo/s512/IMG_0578.JPG&food=VM Organic Edamame Soybeans" http://localhost:5000/addfoodimgurl
 curl --data "url=https://lh3.googleusercontent.com/-VwyqXz_Ce6M/VxVRUgpq5oI/AAAAAAAAAGs/m7GdNb9KPWgYsk9uHoujPL4qWyCNWtTTgCCo/s800/IMG_0611.JPG&food=Seasoned Wedge" http://localhost:5000/addfoodimgurl
 curl --data "url=https://lh3.googleusercontent.com/-1eiavTGUwMY/VxVRUswbfvI/AAAAAAAAAHE/mj6-CvssvDg17JUAcTgxsubCheTELo7VwCCo/s800/IMG_0576.JPG&food=VG Organic Brown Rice" http://localhost:5000/addfoodimgurl
 curl --data "url=https://lh3.googleusercontent.com/-mUgdj4PRuXQ/VxzwqdIOF6I/AAAAAAAAAKo/ZsXOXhGvrjIScZIy-ULV1ZvmYNTFqcfhQCCo/s800/IMG_0666.JPG&food=Matzoh Brie" http://localhost:5000/addfoodimgurl
