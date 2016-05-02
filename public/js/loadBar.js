@@ -1,6 +1,20 @@
-//mod.js
-
 function loadBar() {
+    var inc = 0;
+    if (carmResults < 0) {
+        if (dewickResults < carmResults) {
+            inc = Math.abs(dewickResults * 2);
+        }
+        inc = Math.abs(carmResults * 2);
+    } else if (dewickResults < 0) {
+        inc = Math.abs(dewickResults * 2);
+    }
+
+    if (carmResults === 0 || dewickResults === 0) {
+        inc += Math.max(carmResults, dewickResults);
+    }
+
+    carmResults += inc;
+    dewickResults += inc;
 
     totalResults = carmResults + dewickResults;
 
@@ -11,10 +25,7 @@ function loadBar() {
     dewPerc = 100 - carmPerc;
     dewPerc = keepAboveFifteen(dewPerc);
     $("#dewick").css("width", (dewPerc - 0.2) + "%");
-}
-
-function getRandom(min, max) {
-    return Math.random() * (max - min) + min;
+    console.log(carmResults, dewickResults);
 }
 
 function keepAboveFifteen(perc) {
@@ -26,4 +37,3 @@ function keepAboveFifteen(perc) {
         return perc;
     }
 }
-

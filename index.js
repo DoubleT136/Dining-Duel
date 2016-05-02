@@ -22,7 +22,7 @@ var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
 var weights = {
     'CARVED MEATS & POULTRY': 30,
     'Hearty Soups': 25,
-    'VEGETARIAN': 30,
+    'VEGETARIAN': 20,
     'VEGETABLES': 20,
     'BREADS & ROLLS': 10,
     'DINNER ENTREES': 50,
@@ -35,7 +35,7 @@ var weights = {
     'BAKED FRESH DESSERTS': 15,
     'CREATE YOUR OWN STIRFRY': 5,
     'CHEESE & BREAD BAR': 10,
-    'VEGETARIAN OPTIONS': 30,
+    'VEGETARIAN OPTIONS': 20,
     'FRUIT & YOGURT': 15,
     'LUNCH ENTREE': 40,
     'MEXICAN BAR': 20,
@@ -151,6 +151,7 @@ app.get('/getmealdata', function(req, res) {
                 });
             });
         } else {
+            // update the scores in both comp objects 
             updateDewScore(compKey);
             updateCarmScore(compKey);
             res.json(result);
@@ -165,8 +166,10 @@ app.post('/upvote', function(req, res) {
     var cookie = req.cookies;
     var new_user = false;
     var userID, query;
-
+    console.log(cookie);
+    console.log(0);
     if (!('userID' in cookie)) {
+        console.log(0);
         userID = shortid.generate();
         res.cookie('userID', userID);
         query = {};
@@ -181,6 +184,7 @@ app.post('/upvote', function(req, res) {
     }
 
     db.collection('users').findOne({ '_id': userID }, function(err, result) {
+        var upNum = 1;
         if (err) {
             res.sendStatus(400);
             return;
@@ -190,11 +194,14 @@ app.post('/upvote', function(req, res) {
             res.sendStatus(400);
             return;
         } else {
+            console.log(result.food[foodName]);
+            console.log(new_user);
             if (result.food[foodName] === 'up' && new_user === false) {
                 res.send({});
                 return;
             }
             if (result.food[foodName] === 'down') {
+                upNum = 2;
                 query = {};
                 query[foodName] = 'down';
                 db.collection('users').update({ '_id': userID }, {
@@ -214,7 +221,7 @@ app.post('/upvote', function(req, res) {
                 }
             }, {
                 $inc: {
-                    'compdata.carm.food_arr.$.up': 1
+                    'compdata.carm.food_arr.$.up': upNum
                 }
             }, {
                 multi: true
@@ -236,7 +243,7 @@ app.post('/upvote', function(req, res) {
                     }
                 }, {
                     $inc: {
-                        'compdata.dewick.food_arr.$.up': 1
+                        'compdata.dewick.food_arr.$.up': upNum
                     }
                 }, {
                     multi: true
@@ -271,7 +278,7 @@ app.post('/upvote', function(req, res) {
                 name: foodName
             }, {
                 $inc: {
-                    up: 1
+                    up: upNum
                 }
             });
         }
@@ -299,7 +306,7 @@ app.post('/downvote', function(req, res) {
     }
 
     db.collection('users').findOne({ '_id': userID }, function(err, result) {
-
+        var downNum = -1;
         if (err) {
             res.sendStatus(500);
             return;
@@ -314,6 +321,7 @@ app.post('/downvote', function(req, res) {
                 return;
             }
             if (result.food[foodName] === 'up') {
+                downNum = -2;
                 query = {};
                 query[foodName] = 'up';
                 db.collection('users').update({ '_id': userID }, {
@@ -333,7 +341,7 @@ app.post('/downvote', function(req, res) {
                 }
             }, {
                 $inc: {
-                    'compdata.carm.food_arr.$.down': 1
+                    'compdata.carm.food_arr.$.up': downNum
                 }
 
             }, {
@@ -356,7 +364,7 @@ app.post('/downvote', function(req, res) {
                     }
                 }, {
                     $inc: {
-                        'compdata.dewick.food_arr.$.down': 1
+                        'compdata.dewick.food_arr.$.up': downNum
                     }
                 }, {
                     multi: true
@@ -390,7 +398,7 @@ app.post('/downvote', function(req, res) {
                 name: foodName
             }, {
                 $inc: {
-                    down: 1
+                    up: downNum
                 }
             });
         }
@@ -456,7 +464,7 @@ function updateDewScore(compID) {
     var denom = 0;
     db.collection('comparisons').find({ compID: compID }).forEach(function(data) {
         async.each(data.compdata.dewick.food_arr, function(food, callback2) {
-            score += (food.up * food.weight) / (food.up + food.down + 1);
+            score += food.up;
             denom += food.weight;
             callback2();
         }, function(err) {
@@ -479,7 +487,7 @@ function updateCarmScore(compID) {
     var denom = 0;
     db.collection('comparisons').find({ compID: compID }).forEach(function(data) {
         async.each(data.compdata.carm.food_arr, function(food, callback2) {
-            score += (food.up * food.weight) / (food.up + food.down + 1);
+            score += food.up;
             denom += food.weight;
             callback2();
         }, function(err) {
@@ -525,7 +533,7 @@ function getFoodsAndScore(menu, callback) {
         type = type.trim();
         async.each(typearr, function(foodname, callback2) {
             checkForFood(type, foodname, function(food) {
-                score += (food.up * food.weight) / (food.up + food.down + 1);
+                score += food.up;
                 denom += food.weight;
                 foodArr.push(food);
                 callback2();
@@ -564,8 +572,7 @@ function checkForFood(foodType, foodname, callback) {
                 imgurl: 'http://placehold.it/400/eeba93?text=No+Image+Found',
                 type: foodType,
                 weight: wt,
-                up: 0,
-                down: 0
+                up: 0
             };
             callback(toAdd);
             db.collection('foods').insert(toAdd, function() {});
