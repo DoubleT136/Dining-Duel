@@ -30,7 +30,7 @@ var weights = {
     'SAUCES, GRAVIES & TOPPINGS': 20,
     'SAUCES,GRAVIES & TOPPINGS': 20,
     'PIZZA': 30,
-    'GRILL SELECTIONS': 40,
+    'GRILL SELECTIONS': 30,
     'POTATO & RICE ACCOMPANIMENTS': 35,
     'BAKED FRESH DESSERTS': 15,
     'CREATE YOUR OWN STIRFRY': 5,
@@ -113,7 +113,6 @@ app.get('/getmealdata', function(req, res) {
                     valid = true;
                 }
 
-                // instead of hard coding the 'dewick', we could make it more dynamic by allowing user to specify args (requires change to comparisons structure)
                 request(tddAPI + 'dewick' + apiarg, function(error, response, body) {
                     if (error) {
                         res.sendStatus(500);
@@ -160,20 +159,29 @@ app.get('/getmealdata', function(req, res) {
     });
 });
 
-app.post('/upvote', function(req, res) {
+app.post('/vote', function(req, res) {
+    var voteType = req.body.type;
+    var otherVote;
+    if (voteType === 'u') {
+        otherVote = 'd';
+    } else if (voteType === 'd') { // invalid vote voteType
+        otherVote = 'u';
+    } else {
+        res.sendStatus(400);
+        return;
+    }
     var foodName = req.body.food.replace(/[<>]/g, '');
-    var compID = req.body.compID.replace(/[<>]/g, '');
-    var cookie = req.cookies;
+    var compID   = req.body.compID.replace(/[<>]/g, '');
+    var cookie   = req.cookies;
     var new_user = false;
     var userID, query;
-    console.log(cookie);
-    console.log(0);
+
+    // check the request for the userID cookie
     if (!('userID' in cookie)) {
-        console.log(0);
         userID = shortid.generate();
         res.cookie('userID', userID);
         query = {};
-        query[foodName] = 'up';
+        query[foodName] = voteType;
         db.collection('users').insert({
             '_id': userID,
             'food': query
@@ -194,25 +202,23 @@ app.post('/upvote', function(req, res) {
             res.sendStatus(400);
             return;
         } else {
-            console.log(result.food[foodName]);
-            console.log(new_user);
-            if (result.food[foodName] === 'up' && new_user === false) {
+            // check if user has already upvoted
+            if (result.food[foodName] === voteType && new_user === false) {
+                upNum = 0;
                 res.send({});
                 return;
             }
-            if (result.food[foodName] === 'down') {
+
+            // check if user has already downvoted
+            if (result.food[foodName] === otherVote) {
                 upNum = 2;
-                query = {};
-                query[foodName] = 'down';
-                db.collection('users').update({ '_id': userID }, {
-                    $pull: { 'food': query }
-                });
             }
-            query = {};
-            query[foodName] = 'up';
-            db.collection('users').update({ '_id': userID }, {
-                $addToSet: { 'food': query }
-            });
+
+            // negate upNum if it was a downvote
+            if (voteType === 'd') {
+                upNum = -upNum;
+            }
+            // update the comparisons database
             db.collection('comparisons').update({
                 'compdata.carm.food_arr': {
                     $elemMatch: {
@@ -273,132 +279,19 @@ app.post('/upvote', function(req, res) {
                 });
             });
 
-            // go to foods collection, and update that.
+            // update the users collection
+            query = {};
+            query['food.' + foodName] = voteType;
+            db.collection('users').update({ '_id': userID }, {
+                $set: query
+            });
+
+            // update foods collection
             db.collection('foods').update({
                 name: foodName
             }, {
                 $inc: {
                     up: upNum
-                }
-            });
-        }
-    });
-});
-
-app.post('/downvote', function(req, res) {
-    var foodName = req.body.food.replace(/[<>]/g, '');
-    var compID = req.body.compID.replace(/[<>]/g, '');
-    var cookie = req.cookies;
-    var new_user = false;
-    var userID, query;
-    if (!('userID' in cookie)) {
-        userID = shortid.generate();
-        res.cookie('userID', userID);
-        query = {};
-        query[foodName] = 'down';
-        db.collection('users').insert({
-            '_id': userID,
-            'food': query
-        });
-        new_user = true;
-    } else {
-        userID = cookie.userID;
-    }
-
-    db.collection('users').findOne({ '_id': userID }, function(err, result) {
-        var downNum = -1;
-        if (err) {
-            res.sendStatus(500);
-            return;
-        }
-
-        if (result === null) {
-            res.sendStatus(400);
-            return;
-        } else {
-            if (result.food[foodName] === 'down' && new_user === false) {
-                res.send({});
-                return;
-            }
-            if (result.food[foodName] === 'up') {
-                downNum = -2;
-                query = {};
-                query[foodName] = 'up';
-                db.collection('users').update({ '_id': userID }, {
-                    $pull: { 'food': query }
-                });
-            }
-            query = {};
-            query[foodName] = 'down';
-            db.collection('users').update({ '_id': userID }, {
-                $addToSet: { 'food': query }
-            });
-            db.collection('comparisons').update({
-                'compdata.carm.food_arr': {
-                    $elemMatch: {
-                        name: foodName
-                    }
-                }
-            }, {
-                $inc: {
-                    'compdata.carm.food_arr.$.up': downNum
-                }
-
-            }, {
-                multi: true
-            }, function(err1, count1, result1) {
-                if (err1) {
-                    res.sendStatus(500);
-                    return;
-                }
-
-                if (count1 !== 0) {
-                    updateCarmScore(compID);
-                }
-
-                db.collection('comparisons').update({
-                    'compdata.dewick.food_arr': {
-                        $elemMatch: {
-                            name: foodName
-                        }
-                    }
-                }, {
-                    $inc: {
-                        'compdata.dewick.food_arr.$.up': downNum
-                    }
-                }, {
-                    multi: true
-                }, function(err2, count2, result2) {
-                    if (err2) {
-                        res.sendStatus(500);
-                        return;
-                    }
-
-                    if (count2 !== 0) {
-                        updateDewScore(compID);
-                    }
-
-                    db.collection('comparisons').findOne({ compID: compID }, function(err, result) {
-                        if (err) {
-                            res.sendStatus(500);
-                            return;
-                        }
-
-                        if (!result) {
-                            res.sendStatus(500);
-                        } else {
-                            res.send(result);
-                        }
-                    });
-                });
-            });
-
-            // go to foods collection, and update that.
-            db.collection('foods').update({
-                name: foodName
-            }, {
-                $inc: {
-                    up: downNum
                 }
             });
         }

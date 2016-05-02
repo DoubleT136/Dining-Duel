@@ -64,16 +64,21 @@ function createItem(item, position, compID) {
                     var displayScore = $(this).parent().find('.food-score');
                     $.ajax({
                         method: 'POST',
-                        url: '/upvote',
+                        url: '/vote',
                         data: {
                             food: item.name,
-                            compID: compID
+                            compID: compID,
+                            type: 'u'
+                        },
+                        success: function(result) {
+                            if ($.isEmptyObject(result)) {
+                                return;
+                            }
+                            carmResults = result.compdata.carm.score;
+                            dewickResults = result.compdata.dewick.score;
+                            loadBar();
+                            setScore(position, result, item, displayScore);
                         }
-                    }).done(function(result) {
-                        carmResults = result.compdata.carm.score;
-                        dewickResults = result.compdata.dewick.score;
-                        loadBar();
-                        setScore(position, result, item, displayScore);
                     });
                 }).append(function() {
                     return $('<span>').attr({
@@ -87,16 +92,21 @@ function createItem(item, position, compID) {
                     var displayScore = $(this).parent().find('.food-score');
                     $.ajax({
                         method: 'POST',
-                        url: '/downvote',
+                        url: '/vote',
                         data: {
                             food: item.name,
-                            compID: compID
+                            compID: compID,
+                            type: 'd'
+                        },
+                        success: function(result) {
+                            if ($.isEmptyObject(result)) {
+                                return;
+                            }
+                            carmResults = result.compdata.carm.score;
+                            dewickResults = result.compdata.dewick.score;
+                            loadBar();
+                            setScore(position, result, item, displayScore);
                         }
-                    }).done(function(result) {
-                        carmResults = result.compdata.carm.score;
-                        dewickResults = result.compdata.dewick.score;
-                        loadBar();
-                        setScore(position, result, item, displayScore);
                     });
                 }).append(function() {
                     return $('<span>').attr({
