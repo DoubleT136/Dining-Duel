@@ -159,6 +159,7 @@ app.get('/getmealdata', function(req, res) {
     });
 });
 
+// get the user's vote history based on the cookie
 app.get('/userdata', function(req, res) {
     var cookie = req.cookies ;
     if (!('userID' in cookie)) {

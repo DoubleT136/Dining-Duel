@@ -33,27 +33,26 @@ window.addEventListener('load', function() {
                 });
             });
         }
+    }).done(function() {
+        $.ajax({
+            url: '/userdata',
+            dataType: 'json',
+            success: function(result) {
+                $.each(result, function(key, value) {
+                    var selector = '[name="' + key + '"]';
+                    $(selector).each(function() {
+                        if (value === 'u') {
+                            $(this).find('.downvote').attr('class', 'btn btn-danger downvote');
+                            $(this).find('.upvote').attr('class', 'btn btn-failure upvote');
+                        } else if (value === 'd') {
+                            $(this).find('.downvote').attr('class', 'btn btn-failure downvote');
+                            $(this).find('.upvote').attr('class', 'btn btn-success upvote');
+                        }
+                    });
+                });
+            }
+        });
     });
-
-    $.ajax({
-        url: '/userdata',
-        dataType: 'json',
-        success: function(result) {
-            $.each(result, function(key, value) {
-                var selector = '[name="' + key + '"]';
-                $(selector).each(function() {
-                    if (value === 'u') {
-                        $(this).find('.downvote').attr('class', 'btn btn-danger downvote');
-                        $(this).find('.upvote').attr('class', 'btn btn-failure upvote');
-                    } else if (value === 'd') {
-                        $(this).find('.downvote').attr('class', 'btn btn-failure downvote');
-                        $(this).find('.upvote').attr('class', 'btn btn-success upvote');
-                    }
-                }); 
-            });
-        }
-    });
-    
 });
 
 function sortFoods(a, b) {
@@ -152,7 +151,7 @@ function setScore(foodname, compdata) {
     var item = $.grep(compdata.carm.food_arr, function(e) {
         return e.name == foodname;
     });
-    if (!item) {
+    if (item.length === 0) {
         item = $.grep(compdata.dewick.food_arr, function(e) {
             return e.name == foodname;
         });
@@ -161,7 +160,6 @@ function setScore(foodname, compdata) {
     $(selector).each(function() {
         var oldScore = $(this).find('.food-score').html();
         var newScore = item.up;
-        // render other vote gray on front end so user thinks they cannot vote again. figure out if we want this, because we would want to render it first
         if (newScore > oldScore) {
             $(this).find('.downvote').attr('class', 'btn btn-danger downvote');
             $(this).find('.upvote').attr('class', 'btn btn-failure upvote');

@@ -1,4 +1,7 @@
 function loadBar() {
+    // calculate score change ratio based on distance
+    var carmFactor = 1 + (1 / (10 * carmDistance.distanceFrom + 1));
+    var dewickFactor = 1 + (1 / (10 * dewickDistance.distanceFrom + 1));
     var inc = 0;
     if (carmResults < 0) {
         if (dewickResults < carmResults) {
@@ -15,7 +18,8 @@ function loadBar() {
 
     carmResults += inc;
     dewickResults += inc;
-
+    carmResults *= carmFactor;
+    dewickResults *= dewickFactor;
     totalResults = carmResults + dewickResults;
 
     carmPerc = carmResults / totalResults * 100;

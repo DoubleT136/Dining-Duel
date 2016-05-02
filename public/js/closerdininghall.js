@@ -20,9 +20,8 @@ function getLocation() { // gets user's location
         navigator.geolocation.getCurrentPosition(function(position) {
             myLat = position.coords.latitude;
             myLong = position.coords.longitude;
-            //getData(myLat,myLong);
             indicateCloserDiningHall();
-
+            loadBar();
         });
     } else {
         alert("Geolocation is not supported by your web browser. Sorry!");
