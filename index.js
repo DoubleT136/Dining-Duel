@@ -159,6 +159,28 @@ app.get('/getmealdata', function(req, res) {
     });
 });
 
+app.get('/userdata', function(req, res) {
+    var cookie = req.cookies ;
+    if (!('userID' in cookie)) {
+        res.send({});
+        return;
+    }
+    var userID = cookie.userID;
+    db.collection('users').findOne({'_id': userID}, function(err, result) {
+        if (err) {
+            res.sendStatus(500);
+            return;
+        }
+
+        if (result === null) {
+            res.sendStatus(400);
+            return;
+        }
+
+        res.send(result.food);
+    });
+});
+
 app.post('/vote', function(req, res) {
     var voteType = req.body.type;
     var otherVote;
@@ -171,8 +193,8 @@ app.post('/vote', function(req, res) {
         return;
     }
     var foodName = req.body.food.replace(/[<>]/g, '');
-    var compID   = req.body.compID.replace(/[<>]/g, '');
-    var cookie   = req.cookies;
+    var compID = req.body.compID.replace(/[<>]/g, '');
+    var cookie = req.cookies;
     var new_user = false;
     var userID, query;
 
@@ -194,7 +216,7 @@ app.post('/vote', function(req, res) {
     db.collection('users').findOne({ '_id': userID }, function(err, result) {
         var upNum = 1;
         if (err) {
-            res.sendStatus(400);
+            res.sendStatus(500);
             return;
         }
 
@@ -268,7 +290,6 @@ app.post('/vote', function(req, res) {
                             res.sendStatus(500);
                             return;
                         }
-
 
                         if (!result) {
                             res.sendStatus(500);

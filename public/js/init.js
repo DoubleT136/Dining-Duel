@@ -34,6 +34,26 @@ window.addEventListener('load', function() {
             });
         }
     });
+
+    $.ajax({
+        url: '/userdata',
+        dataType: 'json',
+        success: function(result) {
+            $.each(result, function(key, value) {
+                var selector = '[name="' + key + '"]';
+                $(selector).each(function() {
+                    if (value === 'u') {
+                        $(this).find('.downvote').attr('class', 'btn btn-danger downvote');
+                        $(this).find('.upvote').attr('class', 'btn btn-failure upvote');
+                    } else if (value === 'd') {
+                        $(this).find('.downvote').attr('class', 'btn btn-failure downvote');
+                        $(this).find('.upvote').attr('class', 'btn btn-success upvote');
+                    }
+                }); 
+            });
+        }
+    });
+    
 });
 
 function sortFoods(a, b) {
@@ -59,8 +79,9 @@ function createItem(item, position, compID) {
                 });
             }).append(function() {
                 return $('<button>').attr({
-                    class: 'btn btn-success'
+                    class: 'btn btn-success upvote'
                 }).click(function() {
+                    var curr_btn = this;
                     var displayScore = $(this).parent().find('.food-score');
                     $.ajax({
                         method: 'POST',
@@ -77,7 +98,7 @@ function createItem(item, position, compID) {
                             carmResults = result.compdata.carm.score;
                             dewickResults = result.compdata.dewick.score;
                             loadBar();
-                            setScore(position, result, item, displayScore);
+                            setScore(item.name, result.compdata);
                         }
                     });
                 }).append(function() {
@@ -87,8 +108,9 @@ function createItem(item, position, compID) {
                 });
             }).append(function() {
                 return $('<button>').attr({
-                    class: 'btn btn-danger'
+                    class: 'btn btn-danger downvote'
                 }).click(function() {
+                    var curr_btn = this;
                     var displayScore = $(this).parent().find('.food-score');
                     $.ajax({
                         method: 'POST',
@@ -105,7 +127,7 @@ function createItem(item, position, compID) {
                             carmResults = result.compdata.carm.score;
                             dewickResults = result.compdata.dewick.score;
                             loadBar();
-                            setScore(position, result, item, displayScore);
+                            setScore(item.name, result.compdata);
                         }
                     });
                 }).append(function() {
@@ -114,7 +136,8 @@ function createItem(item, position, compID) {
                     });
                 });
             }).attr({
-                class: 'voting-' + position + ' pull-' + opp
+                class: 'voting-' + position + ' pull-' + opp,
+                name: item.name
             });
         });
     }).attr({
@@ -124,42 +147,28 @@ function createItem(item, position, compID) {
 }
 
 // changes the displayed score of an item on the page
-function setScore(position, result, item, displayScore) {
-
-    if (position === 'left') { // carm
-        // updates score on clicked button's block
-        for (var x in result.compdata.carm.food_arr) {
-            if (result.compdata.carm.food_arr[x].name === item.name) {
-                var carm_food_item = result.compdata.carm.food_arr[x];
-                displayScore.html(carm_food_item.up);
-            }
-        }
-
-        // updates score on identical item in other dining hall
-        var carmtempStore = $(rightfoods).find('.food-block');
-        carmtempStore.each(function() {
-            if ($(this).find('.food-title')[0].innerHTML === item.name) {
-                var newScore = $(this).find('.food-score');
-                newScore.html(carm_food_item.up);
-            }
-        });
-
-    } else if (position === 'right') { // dewick
-        // updates score on clicked button's block
-        for (var y in result.compdata.dewick.food_arr) {
-            if (result.compdata.dewick.food_arr[y].name === item.name) {
-                var dew_food_item = result.compdata.dewick.food_arr[y];
-                displayScore.html(dew_food_item.up);
-            }
-        }
-
-        // updates score on identical item in other dining hall
-        var dewtempStore = $(leftfoods).find('.food-block');
-        dewtempStore.each(function() {
-            if ($(this).find('.food-title')[0].innerHTML === item.name) {
-                var newScore = $(this).find('.food-score');
-                newScore.html(dew_food_item.up);
-            }
+function setScore(foodname, compdata) {
+    var selector = '[name="' + foodname + '"]';
+    var item = $.grep(compdata.carm.food_arr, function(e) {
+        return e.name == foodname;
+    });
+    if (!item) {
+        item = $.grep(compdata.dewick.food_arr, function(e) {
+            return e.name == foodname;
         });
     }
+    item = item[0];
+    $(selector).each(function() {
+        var oldScore = $(this).find('.food-score').html();
+        var newScore = item.up;
+        // render other vote gray on front end so user thinks they cannot vote again. figure out if we want this, because we would want to render it first
+        if (newScore > oldScore) {
+            $(this).find('.downvote').attr('class', 'btn btn-danger downvote');
+            $(this).find('.upvote').attr('class', 'btn btn-failure upvote');
+        } else if (newScore < oldScore) {
+            $(this).find('.downvote').attr('class', 'btn btn-failure downvote');
+            $(this).find('.upvote').attr('class', 'btn btn-success upvote');
+        }
+        $(this).find('.food-score').html(newScore);
+    });
 }
