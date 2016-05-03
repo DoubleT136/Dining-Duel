@@ -4,14 +4,25 @@ dewickResults = 0;
 // note: there is currently an issue where the comparison doesnt work if one of the halls does not have a meal under that day.
 
 window.addEventListener('load', function() {
+    var time = new Date(Date.now());
+    var hour = time.getHours();
+    var curr_meal = 'Breakfast';
+    if (hour > 11) {
+        if (hour < 17) {
+            curr_meal = 'Lunch';
+        } else if (hour < 21) {
+            curr_meal = 'Dinner';
+        }
+    }
+    
     $.ajax({
         url: '/getmealdata',
         dataType: 'json',
         data: {
-            meal: 'Lunch',
-            day: 30,
-            month: 4,
-            year: 2016
+            meal: curr_meal,
+            day: time.getDate(),
+            month: time.getMonth() + 1,
+            year: time.getFullYear()
         },
         success: function(result) {
             carmResults = result.compdata.carm.score;
