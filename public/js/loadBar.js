@@ -6,8 +6,9 @@ function loadBar() {
     if (carmResults < 0) {
         if (dewickResults < carmResults) {
             inc = Math.abs(dewickResults * 2);
+        } else {
+            inc = Math.abs(carmResults * 2);
         }
-        inc = Math.abs(carmResults * 2);
     } else if (dewickResults < 0) {
         inc = Math.abs(dewickResults * 2);
     }
