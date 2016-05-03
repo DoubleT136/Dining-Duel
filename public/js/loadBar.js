@@ -30,6 +30,17 @@ function loadBar() {
     dewPerc = 100 - carmPerc;
     dewPerc = keepAboveFifteen(dewPerc);
     $("#dewick").css("width", (dewPerc - 0.2) + "%");
+
+    $("#carm").popover({
+        placement: "auto right",
+        trigger: "hover",
+        content: "The score of Carmichael is " + Math.round(carmPerc)
+    });
+    $("#dewick").popover({
+        placement: "auto left",
+        trigger: "hover",
+        content: "The score of Dewick is " + Math.round(dewPerc)
+    });
 }
 
 function keepAboveFifteen(perc) {

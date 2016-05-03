@@ -150,7 +150,7 @@ app.get('/getmealdata', function(req, res) {
                 });
             });
         } else {
-            // update the scores in both comp objects 
+            // update the scores in both comp objects
             updateDewScore(compKey);
             updateCarmScore(compKey);
             res.json(result);
@@ -484,7 +484,7 @@ function checkForFood(foodType, foodname, callback) {
             }
             var toAdd = {
                 name: foodname,
-                imgurl: 'http://placehold.it/400/eeba93?text=No+Image+Found',
+                imgurl: 'https://placehold.it/400/eeba93?text=No+Image+Found',
                 type: foodType,
                 weight: wt,
                 up: 0
