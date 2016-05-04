@@ -38,7 +38,7 @@ function loadBar() {
             placement: "bottom",
             container: 'body',
             trigger: "hover",
-            content: "The score of Carm is " + Math.round(carmScore) + ". You are closer to Carm!"
+            content: "The score of Carm is " + Math.round(carmScore) + ". You are also closer to Carm!"
         });
         $("#dewick").popover({
             placement: "bottom",
@@ -57,9 +57,13 @@ function loadBar() {
             placement: "bottom",
             container: 'body',
             trigger: "hover",
-            content: "The score of Dewick is " + Math.round(dewScore) + ". You are closer to Dewick!"
+            content: "The score of Dewick is " + Math.round(dewScore) + ". You are also closer to Dewick!"
         });
     }
+    window.onscroll= function(){
+        $("#carm").popover("hide");
+        $("#dewick").popover("hide");
+    };
 }
 
 function keepAboveFifteen(perc) {

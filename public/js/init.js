@@ -14,7 +14,7 @@ window.addEventListener('load', function() {
             curr_meal = 'Dinner';
         }
     }
-    
+
     $.ajax({
         url: '/getmealdata',
         dataType: 'json',
