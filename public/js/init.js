@@ -157,7 +157,6 @@ function sendVote(vote, item, compID) {
         voteInProgress = true;
         var curr_btn = this;
         var displayScore = $(this).parent().find('.food-score');
-        console.log('hi');
         $.ajax({
             method: 'POST',
             url: '/vote',
