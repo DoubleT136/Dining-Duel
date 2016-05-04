@@ -67,10 +67,6 @@ window.addEventListener('load', function() {
 
 
     if (mq.matches) {
-        $(document.body).css({
-            'background-color': '#E7630E',
-        });
-
         $('.left').attr({
             class: 'mobile-show left',
             style: ''
@@ -79,27 +75,25 @@ window.addEventListener('load', function() {
         $('<div>').attr('class', 'carm-highlight hall-highlight').appendTo('.progress');
 
         $('#carm').click(function() {
-            $(document.body).css({
-                'background-color': '#E7630E',
-            });
             $('.left').attr({
                 class: 'mobile-show left',
                 style: ''
             });
             $('.right').attr('style', 'display: none;');
             $('.hall-highlight').attr('class', 'carm-highlight hall-highlight');
+            $('#carm').popover('show');
+            $('#dewick').popover('hide');
         });
 
         $('#dewick').click(function() {
-            $(document.body).css({
-                'background-color': '#005F5C',
-            });
             $('.left').attr('style', 'display: none;');
             $('.right').attr({
                 class: 'mobile-show right',
                 style: ''
             });
             $('.hall-highlight').attr('class', 'dewick-highlight hall-highlight');
+            $('#carm').popover('hide');
+            $('#dewick').popover('show');
         });
 
         $('#dewick').insertAfter('#carm');
