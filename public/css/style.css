@@ -41,7 +41,6 @@ body {
     -webkit-transition: width 1s;
     transition: width 1s;
     width: 49.8%;
-    text-overflow: ellipsis;
 }
 
 #dewick {
@@ -52,7 +51,6 @@ body {
     -webkit-transition: width 1s;
     transition: width 1s;
     width: 49.8%;
-    text-overflow: ellipsis;
 }
 
 .popover {
@@ -92,7 +90,7 @@ div > .btn {
 @media (max-width: 992px) {
     .food-block {
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: contain;
         border-radius: 3px;
         display: inline-block;
         height: 0;
@@ -222,7 +220,7 @@ div > .btn {
 @media (max-width: 992px) {
     .food-block {
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: contain;
         border-radius: 3px;
         display: inline-block;
         height: 0;
