@@ -92,7 +92,7 @@ div > .btn {
 @media (max-width: 992px) {
     .food-block {
         background-repeat: no-repeat;
-        background-size: contain;
+        background-size: cover;
         border-radius: 3px;
         display: inline-block;
         height: 0;
@@ -222,7 +222,7 @@ div > .btn {
 @media (max-width: 992px) {
     .food-block {
         background-repeat: no-repeat;
-        background-size: contain;
+        background-size: cover;
         border-radius: 3px;
         display: inline-block;
         height: 0;

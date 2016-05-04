@@ -38,6 +38,12 @@ function loadBar() {
     dewScore = 100 - carmScore;
     dewPerc = keepAboveFifteen(dewPerc);
     $("#dewick").css("width", (dewPerc - 0.2) + "%");
+    
+    if (dewPerc < 27) {
+        $('#dewick').html('Dew');
+    } else {
+        $('#dewick').html('Dewick');
+    }
 
     if (carmDistance.distanceFrom < dewickDistance.distanceFrom) {
         $("#carm").popover({

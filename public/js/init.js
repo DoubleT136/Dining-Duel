@@ -1,6 +1,6 @@
 carmResults = 0;
 dewickResults = 0;
-
+voteInProgress = false;
 var mq = window.matchMedia('(max-width: 520px)');
 
 window.addEventListener('load', function() {
@@ -125,26 +125,7 @@ function createItem(item, position, compID) {
                 return $('<button>').attr({
                     class: 'btn btn-success upvote'
                 }).click(function() {
-                    var curr_btn = this;
-                    var displayScore = $(this).parent().find('.food-score');
-                    $.ajax({
-                        method: 'POST',
-                        url: '/vote',
-                        data: {
-                            food: item.name,
-                            compID: compID,
-                            type: 'u'
-                        },
-                        success: function(result) {
-                            if ($.isEmptyObject(result)) {
-                                return;
-                            }
-                            carmResults = result.compdata.carm.score;
-                            dewickResults = result.compdata.dewick.score;
-                            loadBar();
-                            setScore(item.name, result.compdata);
-                        }
-                    });
+                    sendVote('u', item, compID);
                 }).append(function() {
                     return $('<span>').attr({
                         class: 'glyphicon glyphicon-menu-up'
@@ -154,26 +135,7 @@ function createItem(item, position, compID) {
                 return $('<button>').attr({
                     class: 'btn btn-danger downvote'
                 }).click(function() {
-                    var curr_btn = this;
-                    var displayScore = $(this).parent().find('.food-score');
-                    $.ajax({
-                        method: 'POST',
-                        url: '/vote',
-                        data: {
-                            food: item.name,
-                            compID: compID,
-                            type: 'd'
-                        },
-                        success: function(result) {
-                            if ($.isEmptyObject(result)) {
-                                return;
-                            }
-                            carmResults = result.compdata.carm.score;
-                            dewickResults = result.compdata.dewick.score;
-                            loadBar();
-                            setScore(item.name, result.compdata);
-                        }
-                    });
+                    sendVote('d', item, compID);
                 }).append(function() {
                     return $('<span>').attr({
                         class: 'glyphicon glyphicon-menu-down'
@@ -188,6 +150,35 @@ function createItem(item, position, compID) {
         class: 'food-block',
         style: 'background-image: url(' + item.imgurl + ');'
     });
+}
+
+function sendVote(vote, item, compID) {
+    if (!voteInProgress) {
+        voteInProgress = true;
+        var curr_btn = this;
+        var displayScore = $(this).parent().find('.food-score');
+        console.log('hi');
+        $.ajax({
+            method: 'POST',
+            url: '/vote',
+            data: {
+                food: item.name,
+                compID: compID,
+                type: vote
+            },
+            success: function(result) {
+                if ($.isEmptyObject(result)) {
+                    return;
+                }
+                carmResults = result.compdata.carm.score;
+                dewickResults = result.compdata.dewick.score;
+                loadBar();
+                setScore(item.name, result.compdata);
+            }
+        }).done(function() {
+            voteInProgress = false;
+        });
+    }
 }
 
 // changes the displayed score of an item on the page
