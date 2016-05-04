@@ -2,7 +2,6 @@ carmResults = 0;
 dewickResults = 0;
 
 var mq = window.matchMedia('(max-width: 520px)');
-// note: there is currently an issue where the comparison doesnt work if one of the halls does not have a meal under that day.
 
 window.addEventListener('load', function() {
     var time = new Date(Date.now());
@@ -71,7 +70,7 @@ window.addEventListener('load', function() {
         $(document.body).css({
             'background-color': '#E7630E',
         });
-        // attr('style', 'background-color')
+
         $('.left').attr({
             class: 'mobile-show left',
             style: ''

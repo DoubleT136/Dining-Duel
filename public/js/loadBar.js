@@ -17,8 +17,14 @@ function loadBar() {
         inc += Math.abs(Math.max(carmResults, dewickResults));
     }
 
+
     carmResults += inc;
     dewickResults += inc;
+    if (carmResults === 0 && dewickResults === 0) {
+        carmResults += 1;
+        dewickResults += 1;
+    }
+
     carmResults *= carmFactor;
     dewickResults *= dewickFactor;
     totalResults = carmResults + dewickResults;
