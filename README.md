@@ -67,7 +67,7 @@ Database of food reviews:
 ![mockup 6](http://i1318.photobucket.com/albums/t645/diningduel/desktop_vegetarian_prompt_zps5gy5i8p8.png)
 	
 ###Final Presentation
-![final presentation](https://lh3.googleusercontent.com/-opuljYxI6oE/VymDNEa8GLI/AAAAAAAAAMU/-Ul-sqme7UI3hhxCQbUVG_Zzd8C6Q9n3ACCo/s770/Final_Presentation.jpg)
+![final presentation](https://lh3.googleusercontent.com/-AQ2Mtxb0sUE/VymGYfk8JdI/AAAAAAAAAMw/A7wDI0-haYwR1so46keA_kSGImlFRsU3wCCo/s770/Final_Presentation.jpg)
 
 #Comments by Ming
 * Good idea!  Scraping menus from the Tufts Dining website can be a challenge.  What third-party APIs and/or data sets will be used?
