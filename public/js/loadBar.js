@@ -37,13 +37,13 @@ function loadBar() {
         $("#carm").popover({
             placement: "bottom",
             container: 'body',
-            trigger: "hover",
+            trigger: "hover click",
             content: "The score of Carm is " + Math.round(carmScore) + ". You are also closer to Carm!"
         });
         $("#dewick").popover({
             placement: "bottom",
             container: 'body',
-            trigger: "hover",
+            trigger: "hover click",
             content: "The score of Dewick is " + Math.round(dewScore) + "."
         });
     } else if (carmDistance.distanceFrom > dewickDistance.distanceFrom) {
