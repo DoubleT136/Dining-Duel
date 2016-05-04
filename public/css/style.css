@@ -4,7 +4,7 @@ to render front end, because only updates what has changed*/
 
 body {
   background-image: url(background.jpg);
-  font-family: Philosopher;
+  font-family: 'Raleway', sans-serif;
   font-weight: 200;
   margin: 0;
   padding: 0;
@@ -52,10 +52,20 @@ body {
   width: 49.8%;
 }
 
+.popover {
+  background: #343434;
+}
+
 .popover-content {
-  font-family: Philosopher;
+  font-family: 'Raleway', sans-serif;
   background-color: #343434;
   color: white;
+  text-align: center;
+  font-size: 16px;
+}
+
+.popover.bottom > .arrow:after {
+  border-bottom-color: #343434;
 }
 
 div > .btn {
