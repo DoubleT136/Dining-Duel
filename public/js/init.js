@@ -1,6 +1,7 @@
 carmResults = 0;
 dewickResults = 0;
 
+var mq = window.matchMedia('(max-width: 520px)');
 // note: there is currently an issue where the comparison doesnt work if one of the halls does not have a meal under that day.
 
 window.addEventListener('load', function() {
@@ -14,7 +15,7 @@ window.addEventListener('load', function() {
             curr_meal = 'Dinner';
         }
     }
-    
+
     $.ajax({
         url: '/getmealdata',
         dataType: 'json',
@@ -54,9 +55,9 @@ window.addEventListener('load', function() {
                     $(selector).each(function() {
                         if (value === 'u') {
                             $(this).find('.downvote').attr('class', 'btn btn-danger downvote');
-                            $(this).find('.upvote').attr('class', 'btn btn-failure upvote');
+                            $(this).find('.upvote').attr('class', 'btn btn-secondary upvote');
                         } else if (value === 'd') {
-                            $(this).find('.downvote').attr('class', 'btn btn-failure downvote');
+                            $(this).find('.downvote').attr('class', 'btn btn-secondary downvote');
                             $(this).find('.upvote').attr('class', 'btn btn-success upvote');
                         }
                     });
@@ -64,6 +65,46 @@ window.addEventListener('load', function() {
             }
         });
     });
+
+
+    if (mq.matches) {
+        $(document.body).css({
+            'background-color': '#E7630E',
+        });
+        // attr('style', 'background-color')
+        $('.left').attr({
+            class: 'mobile-show left',
+            style: ''
+        });
+        $('.right').attr('style', 'display: none;');
+        $('<div>').attr('class', 'carm-highlight hall-highlight').appendTo('.progress');
+
+        $('#carm').click(function() {
+            $(document.body).css({
+                'background-color': '#E7630E',
+            });
+            $('.left').attr({
+                class: 'mobile-show left',
+                style: ''
+            });
+            $('.right').attr('style', 'display: none;');
+            $('.hall-highlight').attr('class', 'carm-highlight hall-highlight');
+        });
+
+        $('#dewick').click(function() {
+            $(document.body).css({
+                'background-color': '#005F5C',
+            });
+            $('.left').attr('style', 'display: none;');
+            $('.right').attr({
+                class: 'mobile-show right',
+                style: ''
+            });
+            $('.hall-highlight').attr('class', 'dewick-highlight hall-highlight');
+        });
+
+        $('#dewick').insertAfter('#carm');
+    }
 });
 
 function sortFoods(a, b) {
@@ -173,9 +214,9 @@ function setScore(foodname, compdata) {
         var newScore = item.up;
         if (newScore > oldScore) {
             $(this).find('.downvote').attr('class', 'btn btn-danger downvote');
-            $(this).find('.upvote').attr('class', 'btn btn-failure upvote');
+            $(this).find('.upvote').attr('class', 'btn btn-secondary upvote');
         } else if (newScore < oldScore) {
-            $(this).find('.downvote').attr('class', 'btn btn-failure downvote');
+            $(this).find('.downvote').attr('class', 'btn btn-secondary downvote');
             $(this).find('.upvote').attr('class', 'btn btn-success upvote');
         }
         $(this).find('.food-score').html(newScore);
