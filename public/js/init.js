@@ -68,9 +68,6 @@ window.addEventListener('load', function() {
 
 
     if (mq.matches) {
-        $(document.body).css({
-            'background-color': '#E7630E',
-        });
         // attr('style', 'background-color')
         $('.left').attr({
             class: 'mobile-show left',
@@ -80,9 +77,6 @@ window.addEventListener('load', function() {
         $('<div>').attr('class', 'carm-highlight hall-highlight').appendTo('.progress');
 
         $('#carm').click(function() {
-            $(document.body).css({
-                'background-color': '#E7630E',
-            });
             $('.left').attr({
                 class: 'mobile-show left',
                 style: ''
@@ -92,9 +86,6 @@ window.addEventListener('load', function() {
         });
 
         $('#dewick').click(function() {
-            $(document.body).css({
-                'background-color': '#005F5C',
-            });
             $('.left').attr('style', 'display: none;');
             $('.right').attr({
                 class: 'mobile-show right',
