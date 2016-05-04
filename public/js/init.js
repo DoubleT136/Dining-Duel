@@ -83,6 +83,8 @@ window.addEventListener('load', function() {
             });
             $('.right').attr('style', 'display: none;');
             $('.hall-highlight').attr('class', 'carm-highlight hall-highlight');
+            $('#carm').popover('show');
+            $('#dewick').popover('hide');
         });
 
         $('#dewick').click(function() {
@@ -92,6 +94,8 @@ window.addEventListener('load', function() {
                 style: ''
             });
             $('.hall-highlight').attr('class', 'dewick-highlight hall-highlight');
+            $('#carm').popover('hide');
+            $('#dewick').popover('show');
         });
 
         $('#dewick').insertAfter('#carm');

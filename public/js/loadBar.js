@@ -37,26 +37,26 @@ function loadBar() {
         $("#carm").popover({
             placement: "bottom",
             container: 'body',
-            trigger: mq.matches ? "hover click" : "hover",
+            trigger: mq.matches ? "": "hover",
             content: "The score of Carm is " + Math.round(carmScore) + ". You are also closer to Carm!"
         });
         $("#dewick").popover({
             placement: "bottom",
             container: 'body',
-            trigger: mq.matches ? "hover click" : "hover",
+            trigger: mq.matches ? "": "hover",
             content: "The score of Dewick is " + Math.round(dewScore) + "."
         });
     } else if (carmDistance.distanceFrom > dewickDistance.distanceFrom) {
         $("#carm").popover({
             placement: "bottom",
             container: 'body',
-            trigger: mq.matches ? "hover click" : "hover",
+            trigger: mq.matches ? "" : "hover",
             content: "The score of Carm is " + Math.round(carmScore) + "."
         });
         $("#dewick").popover({
             placement: "bottom",
             container: 'body',
-            trigger: mq.matches ? "hover click" : "hover",
+            trigger: mq.matches ? "" : "hover",
             content: "The score of Dewick is " + Math.round(dewScore) + ". You are also closer to Dewick!"
         });
     }
