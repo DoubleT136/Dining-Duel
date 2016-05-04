@@ -284,3 +284,8 @@ div > .btn {
 a {
     color: white;
 }
+
+.footer {
+    margin-bottom: 70px;
+    text-align: center;
+}
