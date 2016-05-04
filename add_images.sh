@@ -55,3 +55,47 @@ curl --data "url=https://lh3.googleusercontent.com/-egEe8_O6S1w/VxVRUgORzYI/AAAA
 curl --data "url=https://lh3.googleusercontent.com/-VqxvpJtfSGA/VxVRUgWylWI/AAAAAAAAAGs/2X6zqnTXxqM6PWpTHeSYfM5g4-hvkltVACCo/s800/IMG_0599.JPG&food=General Gau's Chicken" http://localhost:5000/addfoodimgurl
 curl --data "url=https://lh3.googleusercontent.com/-Z6xhJWNiNhc/VxVRUlf9AlI/AAAAAAAAAGs/DtyvxpqYpmgcad4j4mJgT7ezKKndfspMwCCo/s800/IMG_0610.JPG&food=Whole Grain Pancakes" http://localhost:5000/addfoodimgurl
 curl --data "url=https://lh3.googleusercontent.com/-3rUpQTZ3IYM/VxVRUuNrN0I/AAAAAAAAAGs/kZixoer0wZkpDAuhyUdFi6lFBjgloeIPQCCo/s800/IMG_0612.JPG&food=VM Scrambled Eggs" http://localhost:5000/addfoodimgurl
+curl --data "url=http://images.media-allrecipes.com/userphotos/250x250/1579861.jpg&food=Chicken Noodle Soup" http://localhost:5000/addfoodimgurl
+curl --data "url=http://www.recipe.com/images/slow-cooker-smoky-navy-bean-soup-ss.jpg&food=VG Vegetarian Navy Bean Soup" http://localhost:5000/addfoodimgurl
+curl --data "url=https://www.raleys.com/images/imagescontent/1607601.jpg&food=Chicken, Brocolli & Penne" http://localhost:5000/addfoodimgurl
+curl --data "url=http://images.edge-generalmills.com/c3b12d4e-b16e-4ff3-a03c-8c5291a5e98c.jpg&food=Meatball Sub" http://localhost:5000/addfoodimgurl
+curl --data "url=http://images.edge-generalmills.com/c3b12d4e-b16e-4ff3-a03c-8c5291a5e98c.jpg&food=Meatball Sub w/Provolone Cheese" http://localhost:5000/addfoodimgurl
+curl --data "url=http://www.kitchentreaty.com/wp-content/uploads/2015/09/supremely-delicious-black-beans-from-scratch3-700x500.jpg&food=VG Organic Black Beans" http://localhost:5000/addfoodimgurl
+curl --data "url=http://cookieandkate.com/images/20http://img.cookspiration.com/devices/134/2/en/veggie.pizza.with.three.cheese.ipad.jpg13/05/sweet-potato-black-bean-veggie-burgers.jpg&food=VG Sweet Potato & Black Bean Burger" http://localhost:5000/addfoodimgurl
+curl --data "url=http://populardishes.com/wp-content/uploads/tarka-dal.jpg&food=VG Tarka Dal" http://localhost:5000/addfoodimgurl
+curl --data "url=http://images.teamsugar.com/files/upl1/1/15259/28_2008/gardenburger.png&food=VM Garden Burger" http://localhost:5000/addfoodimgurl
+curl --data "url=http://http://www.recipe.com/images/beef-enchiladas-rancheras-18300016rca-ss.jpg&food=VM Mexican Enchilada w/Rice" http://localhost:5000/addfoodimgurl
+curl --data "url=http://www.eatingwell.com/sites/default/files/imagecache/standard/recipes/MV7152.JPG&food=VM Tortellini & Vegetables" http://localhost:5000/addfoodimgurl
+curl --data "url=http://jeanetteshealthyliving.com/wp-content/uploads/2012/02/BarillaStirFryNoodles3.jpg&food=Chicken and Noodle Stir - Fry w/Thai Red Curry Sauce" http://localhost:5000/addfoodimgurl
+curl --data "url=http://delishknowledge.com/wp-content/uploads/sesame_garlic_stirfry_sauce3-678x1024.jpg&food=Tofu and Noodle Stir - Fry w/Sesame Garlic Glaze" http://localhost:5000/addfoodimgurl
+curl --data "url=http://www.onceuponachef.com/images/2010/06/6a0115721bb963970b013481996702970c-450wi.jpg&food=Grilled Chicken Breast" http://localhost:5000/addfoodimgurl
+curl --data "url=http://dining.columbia.edu/files/dining/meals-images/hotdogbun.jpg&food=Grilled Hotdog" http://localhost:5000/addfoodimgurl
+curl --data "url=http://2.bp.blogspot.com/-FUtwy7_HFSY/TsCPJyPQCAI/AAAAAAAABP8/BJ2unSC8uic/s1600/pico_de_gallo1.jpg&food=Fresh Pico De Gallo Salsa" http://localhost:5000/addfoodimgurl
+curl --data "url=http://aht.seriouseats.com/images/2012/04/20120409-200020-boulder-junction-boulder-cheeseburger-half.jpg&food=Grilled Cheddar Cheeseburger" http://localhost:5000/addfoodimgurl
+curl --data "url=http://www.simplyrecipes.com/wp-content/uploads/2009/05/guacamole-520-b.jpg&food=Guacomole Dip" http://localhost:5000/addfoodimgurl
+curl --data "url=http://yumuniverse.com/wp-content/uploads/2012/07/Sauteed_Rainbow_Chard_Tomato_Onions_onions1.jpg&food=Sauteed Onions" http://localhost:5000/addfoodimgurl
+curl --data "url=https://lh3.googleusercontent.com/-UHQ6K9g7lwA/VxbLNyTyMjI/AAAAAAAAAGs/wpqZ6NE01Mcc1VaOVqwIKoVz4zmGHCGIQCCo/s800/IMG_0633.JPG&food=Sweet Potato Puffs" http://localhost:5000/addfoodimgurl
+curl --data "url=http://www.norpac.com/images/products/foodservice/vegetables/stirfry/vegiblend.jpg&food=Stir Fry Blend Veg" http://localhost:5000/addfoodimgurl
+curl --data "url=http://img.sndimg.com/food/image/upload/w_555,h_416,c_fit,fl_progressive,q_95/v1/img/recipes/48/45/46/picMY6gCd.jpg&food=Zucchini w/Summer Squash & Basil" http://localhost:5000/addfoodimgurl
+curl --data "url=http://files.recipetips.com/images/glossary/a/apple_sauce_reg.jpg&food=Apple Sauce" http://localhost:5000/addfoodimgurl
+curl --data "url=http://lh3.googleusercontent.com/3y25AbvOnYUUXFfdD9lsVcekkKGos9vEA0Tj_ASYuQUecnu3egSXuOvayCui25FvRqd7KPzieqwdfCB5PJK0ZEw=s480-c-e365&food=Bacon Lettuce Tomato Pizza" http://localhost:5000/addfoodimgurl
+curl --data "url=http://static-vegetariantimes.s3.amazonaws.com/wp-content/uploads/2010/05/1FD_Broccoli_WhitePizza_MED-458x326.jpg&food=Broccoli, Onion & Mushroom Pizza" http://localhost:5000/addfoodimgurl
+curl --data "url=http://cdn.nexternal.com/cincyfav3/images/larosas_cheese_pizzas1.jpg&food=Cheese Pizza" http://localhost:5000/addfoodimgurl
+curl --data "url=http://img.cookspiration.com/devices/134/2/en/veggie.pizza.with.three.cheese.ipad.jpg&food=VG Pizza Veggie w/No Cheese" http://localhost:5000/addfoodimgurl
+curl --data "url=http://cdn.nexternal.com/cincyfav3/images/larosas_cheese_pizzas1.jpg&food=Vegan Pizza Basil, Tomato & Non-Dairy Cheese" http://localhost:5000/addfoodimgurl
+curl --data "url=http://400caloriesorless.com/wp-content/uploads/2010/04/chicken-salad.jpg&food=Chunky Chicken Salad" http://localhost:5000/addfoodimgurl
+curl --data "url=https://upload.wikimedia.org/wikipedia/commons/5/5f/Spanish_salami_in_Poznan.JPG&food=Deli Sliced Genoa Salami" http://localhost:5000/addfoodimgurl
+curl --data "url=http://static.theglobeandmail.ca/e3a/incoming/article898200.ece/ALTERNATES/w620/WEB+luncheon+meat+ham+slices.jpg&food=Deli Sliced Ham" http://localhost:5000/addfoodimgurl
+curl --data "url=http://www.weissmeats.com/image/cache/data/sliced%20roast%20beef-500x500.jpg&food=Deli Sliced Roast Beef" http://localhost:5000/addfoodimgurl
+curl --data "url=http://www.greennbrown.com/eco-friendly/wp-content/uploads/2012/01/turkey.jpg&food=Deli Sliced Turkey" http://localhost:5000/addfoodimgurl
+curl --data "url=http://images.media-allrecipes.com/userphotos/250x250/917952.jpg&food=Egg Salad" http://localhost:5000/addfoodimgurl
+curl --data "url=http://www.markon.com/sites/default/files/styles/product_banner/public/prdimg//RSS_Iceberg_Shred.jpg?itok=H_tKG6o0&food=Shredded Lettuce" http://localhost:5000/addfoodimgurl
+curl --data "url=http://cdn5.kozzi.com/b1/12/322/photo-24767850-slices-of-cheddar-cheese.jpg&food=Sliced Cheddar Cheese" http://localhost:5000/addfoodimgurl
+curl --data "url=http://previews.123rf.com/images/bwf211/bwf2111107/bwf211110700039/9893554-Several-slices-of-muenster-cheese-on-a-white-background--Stock-Photo.jpg&food=Sliced Muenster Cheese" http://localhost:5000/addfoodimgurl
+curl --data "url=https://d39hcmrh8xztgk.cloudfront.net/product_product-large_phpxuhGvD.jpg&food=Sliced Provolone Cheese" http://localhost:5000/addfoodimgurl
+curl --data "url=http://brotheryellow.com/wp-content/uploads/2014/06/swiss-cheese-ss_0.jpg&food=Sliced Swiss Cheese" http://localhost:5000/addfoodimgurl
+curl --data "url=http://thegrownetwork.com/wp-content/uploads/2015/07/bigstock-Red-sliced-tomato-90434192-300x171.jpg&food=Sliced Tomatoes" http://localhost:5000/addfoodimgurl
+curl --data "url=https://foodimentaryguy.files.wordpress.com/2012/04/americancheese.jpg&food=White American Cheese" http://localhost:5000/addfoodimgurl
+curl --data "url=https://lh4.googleusercontent.com/_OaYG005JPDs/TcRZR9r4o3I/AAAAAAAADJ8/wQ8Mw3LRDAg/s640/Tuna%20Salad%20angle.jpg&food=Tuna Salad" http://localhost:5000/addfoodimgurl
+curl --data "url=https://asdoasdiadnsiuhiwuh.files.wordpress.com/2012/04/sullivan_chickpeasalad2-scaled1000.jpg&food=VG Chickpea Salad" http://localhost:5000/addfoodimgurl
+
