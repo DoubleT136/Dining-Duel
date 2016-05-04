@@ -24,23 +24,46 @@ function loadBar() {
     totalResults = carmResults + dewickResults;
 
     carmPerc = carmResults / totalResults * 100;
+    carmScore = carmPerc;
     carmPerc = keepAboveFifteen(carmPerc);
     $("#carm").css("width", (carmPerc - 0.2) + "%");
 
     dewPerc = 100 - carmPerc;
+    dewScore = dewPerc;
     dewPerc = keepAboveFifteen(dewPerc);
     $("#dewick").css("width", (dewPerc - 0.2) + "%");
 
-    $("#carm").popover({
-        placement: "auto right",
-        trigger: "hover",
-        content: "The score of Carmichael is " + Math.round(carmPerc)
-    });
-    $("#dewick").popover({
-        placement: "auto left",
-        trigger: "hover",
-        content: "The score of Dewick is " + Math.round(dewPerc)
-    });
+    if (carmDistance.distanceFrom < dewickDistance.distanceFrom) {
+        $("#carm").popover({
+            placement: "bottom",
+            container: 'body',
+            trigger: "hover",
+            content: "The score of Carm is " + Math.round(carmScore) + ". You are also closer to Carm!"
+        });
+        $("#dewick").popover({
+            placement: "bottom",
+            container: 'body',
+            trigger: "hover",
+            content: "The score of Dewick is " + Math.round(dewScore) + "."
+        });
+    } else if (carmDistance.distanceFrom > dewickDistance.distanceFrom) {
+        $("#carm").popover({
+            placement: "bottom",
+            container: 'body',
+            trigger: "hover",
+            content: "The score of Carm is " + Math.round(carmScore) + "."
+        });
+        $("#dewick").popover({
+            placement: "bottom",
+            container: 'body',
+            trigger: "hover",
+            content: "The score of Dewick is " + Math.round(dewScore) + ". You are also closer to Dewick!"
+        });
+    }
+    window.onscroll= function(){
+        $("#carm").popover("hide");
+        $("#dewick").popover("hide");
+    };
 }
 
 function keepAboveFifteen(perc) {

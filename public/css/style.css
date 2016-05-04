@@ -3,8 +3,8 @@ EVERYTHING is in a grid, remember that. Look into using React
 to render front end, because only updates what has changed*/
 
 body {
-  background-color: #fec;
-  font-family: Helvetica;
+  background-image: url(background.jpg);
+  font-family: 'Raleway', sans-serif;
   font-weight: 200;
   margin: 0;
   padding: 0;
@@ -34,7 +34,7 @@ body {
 }
 
 #carm {
-  background-color: #FF6905;
+  background-color: #E7630E;
   -moz-transition: width 1s;
   -o-transition: width 1s;
   -webkit-transition: width 1s;
@@ -43,13 +43,29 @@ body {
 }
 
 #dewick {
-  background-color: #417DC1;
+  background-color: #005F5C;
   float: right;
   -moz-transition: width 1s;
   -o-transition: width 1s;
   -webkit-transition: width 1s;
   transition: width 1s;
   width: 49.8%;
+}
+
+.popover {
+  background: #343434;
+}
+
+.popover-content {
+  font-family: 'Raleway', sans-serif;
+  background-color: #343434;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+}
+
+.popover.bottom > .arrow:after {
+  border-bottom-color: #343434;
 }
 
 div > .btn {
