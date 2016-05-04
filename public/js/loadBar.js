@@ -35,7 +35,7 @@ function loadBar() {
     $("#carm").css("width", (carmPerc - 0.2) + "%");
 
     dewPerc = 100 - carmPerc;
-    dewScore = dewPerc;
+    dewScore = 100 - carmScore;
     dewPerc = keepAboveFifteen(dewPerc);
     $("#dewick").css("width", (dewPerc - 0.2) + "%");
 
