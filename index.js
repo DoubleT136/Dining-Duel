@@ -161,13 +161,13 @@ app.get('/getmealdata', function(req, res) {
 
 // get the user's vote history based on the cookie
 app.get('/userdata', function(req, res) {
-    var cookie = req.cookies ;
+    var cookie = req.cookies;
     if (!('userID' in cookie)) {
         res.send({});
         return;
     }
     var userID = cookie.userID;
-    db.collection('users').findOne({'_id': userID}, function(err, result) {
+    db.collection('users').findOne({ '_id': userID }, function(err, result) {
         if (err) {
             res.sendStatus(500);
             return;
