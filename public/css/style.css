@@ -41,6 +41,7 @@ body {
     -webkit-transition: width 1s;
     transition: width 1s;
     width: 49.8%;
+    text-overflow: ellipsis;
 }
 
 #dewick {
@@ -51,6 +52,7 @@ body {
     -webkit-transition: width 1s;
     transition: width 1s;
     width: 49.8%;
+    text-overflow: ellipsis;
 }
 
 .popover {
