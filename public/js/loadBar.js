@@ -84,6 +84,8 @@ function loadBar() {
         $("#carm").popover("hide");
         $("#dewick").popover("hide");
     };
+    var isVisible = $('#carm').data('bs.popover').tip().hasClass('in');
+    console.log(isVisible); // true or false
 }
 
 function keepAboveFifteen(perc) {
